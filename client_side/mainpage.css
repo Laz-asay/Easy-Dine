@@ -1,0 +1,116 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #D9D9D9;
+    color: black;
+    padding: 0;
+    margin: 0;
+    letter-spacing: 0.09px;
+    font-stretch: ultra-expanded;
+}
+
+.head-menu {
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+}
+
+/* TABLE NUMBER AND CART*/
+
+.top-menu {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.cart-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 1em;
+}
+
+.cart-button img {
+    width: 35px;
+    height: auto;
+}
+
+.table-number {
+    font-weight:bold ;
+    margin-left: 1em;
+    margin-bottom: 2em;
+
+    .table-number-colour {
+        color: #944E63;
+    }
+}
+
+.table-number h1 {
+    margin-bottom: 0;
+}
+
+.table-number a {
+    display: block;
+}
+
+/* END OF TABLE NUMBER AND CART */
+
+.scroll-dish {
+    margin-bottom: 2em;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-left: 2em;
+    padding-right: 2em;    
+    justify-content: space-between;
+
+    .card {
+        padding-left: 2em;
+        padding-right: 2em;
+        flex: 0 0 auto;
+    }
+}
+
+.scroll-dish h2{
+    font-size: 1em;
+}
+
+
+/*ACTUAL MENU DISPLAYED BELOW */
+/*ACTUAL MENU DISPLAYED BELOW */
+/* I FUCKING HATE THIS */
+
+.menu-box {
+    margin-top: 1em;
+    padding: 1em;
+    background-color: white;
+    margin-bottom: 2em;
+    display: flex;
+    align-items: center;
+    border-radius: 0.5em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.img-and-name {
+    display: flex;
+}
+
+.name-and-price {
+    margin-top: 0;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.dish-image {
+    width: 40%;
+    height: auto;
+    border-radius: 0.5em;
+}
+
+.add-to-cart {
+    background: none;
+    border: none;
+}

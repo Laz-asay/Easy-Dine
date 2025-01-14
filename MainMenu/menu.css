@@ -1,0 +1,250 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: rgb(0, 0, 0);
+
+    color: white;
+    font-weight: bold;
+}
+
+.main-content {
+    margin-left: 175px; /* Matches the sidebar width */
+    padding: 20px; /* Optional padding for spacing */
+    background-color: rgb(0, 0, 0);
+    color: white; /* Ensures text remains visible */
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/********************* SIDE PANEL STYLE **************************/
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.popup-content h3 {
+    margin-top: 0;
+}
+
+.popup-content form {
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-content label {
+    margin: 10px 0 5px;
+}
+
+.popup-content input, .popup-content select, .popup-content button {
+    margin-bottom: 10px;
+}
+
+/********************* END OF SIDE PANEL STYLE **************************/
+
+
+
+/********************* Add dish popup **************************/
+
+.open-popup {
+    padding: 10px 20px;
+    background-color: #5a5a5a;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+.open-popup:hover {
+    background-color: #f3f3f3;
+    color: black;
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close-popup:hover {
+    color: #000;
+}
+
+
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-container.show {
+    display: flex;
+}
+
+.popup-content {
+    background-color: black;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.popup-form input {
+    background-color: black;
+    color: white;
+    display: block;
+    width: 95%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid rgb(66, 66, 66);
+    border-radius: 5px;
+}
+
+.popup-form textarea {
+
+    background-color: black;
+    color: white;
+    display: block;
+    width: 95%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid rgb(66, 66, 66);
+    border-radius: 5px;
+    resize: none;
+}
+
+.popup-form select {
+    background-color: black;
+    color: white;
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid rgb(66, 66, 66);
+    border-radius: 5px;
+}
+
+.category-choose {
+    color: #666;
+}
+
+.popup-form input[type="submit"],
+.popup-form input[type="reset"] {
+    width: auto;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    color: white;
+    margin-right: 10px;
+}
+
+/* For every browser except firefox (no i will not do for firefox that is your problem if you use firefox) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* CHOOSE FILE STYLE */
+.custom-file-input {
+    position: relative;
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.file-label {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+
+.file-label:hover {
+    background-color: #0056b3;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+#file-name {
+    margin-left: 10px;
+    font-style: italic;
+    color: #666;
+}
+/* END OF CHOOSE FILE STYLE */
+
+
+.popup-form input[type="submit"] {
+    background-color: #007bff;
+}
+
+.popup-form input[type="reset"] {
+    background-color: #dc3545;
+}
+
+.popup-form input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+.popup-form input[type="reset"]:hover {
+    background-color: #c82333;
+}
+/********************* END OF Add dish popup **************************/
+
+.table-management {
+    padding: 10px;
+}
+
+.table-button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
