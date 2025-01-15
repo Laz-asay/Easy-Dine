@@ -2,9 +2,10 @@
 include "../connectdb.php";
 
 if (isset($_GET['q'])) {
-    $category = $_GET['q'];
+    $categoryName = $_GET['q'];
+
     $stmt = $conn->prepare("SELECT * FROM menu WHERE dish_category = ? AND dish_availability = 'available'");
-    $stmt->bind_param("s", $category);
+    $stmt->bind_param("s", $categoryName);
     $stmt->execute();
     $result = $stmt->get_result();
 
