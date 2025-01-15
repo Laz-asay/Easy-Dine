@@ -112,5 +112,8 @@
                 $conn->close();
                 ?>          
         </div>
+
+        <script src="cart.js"></script>
+
     </body>
 </html>
