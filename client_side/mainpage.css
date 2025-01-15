@@ -12,17 +12,24 @@ body {
     background-color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     position: fixed;
+    width: 100%;
+    padding: 15px;
     z-index: 1000;
     top: 0;
+    left: 0;
 }
 
-/* TABLE NUMBER AND CART*/
+body {
+    padding-top: 90px; /* Adjust this based on the height of your top-menu */
+}
 
 .top-menu {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .cart-button {
@@ -38,13 +45,13 @@ body {
 }
 
 .table-number {
-    font-weight:bold ;
+    font-weight: bold;
     margin-left: 1em;
     margin-bottom: 2em;
+}
 
-    .table-number-colour {
-        color: #944E63;
-    }
+.table-number-colour {
+    color: #944E63;
 }
 
 .table-number h1 {
@@ -55,32 +62,34 @@ body {
     display: block;
 }
 
-/* END OF TABLE NUMBER AND CART */
-
-.scroll-dish {
-    margin-bottom: 2em;
+.card-container {
     display: flex;
     flex-wrap: nowrap;
     overflow-x: auto;
     padding-left: 2em;
-    padding-right: 2em;    
-    justify-content: space-between;
+    padding-right: 2em;
+    justify-content: flex-start;
+    gap: 1em;
+}
 
-    .card {
-        padding-left: 2em;
-        padding-right: 2em;
-        flex: 0 0 auto;
+.card {
+    flex: 0 0 auto;
     }
+
+.card button {
+    padding: 0.5em 1em;
+    background-color: #944E63;
+    color: white;
+    border: none;
+    border-radius: 0.5em;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.scroll-dish h2{
-    font-size: 1em;
+.card button:hover {
+    background-color: #7c3d53;
 }
-
-
-/*ACTUAL MENU DISPLAYED BELOW */
-/*ACTUAL MENU DISPLAYED BELOW */
-/* I FUCKING HATE THIS */
 
 .menu-box {
     margin-top: 1em;
@@ -113,4 +122,23 @@ body {
 .add-to-cart {
     background: none;
     border: none;
+}
+
+.display-menu {
+    margin-top: 90px; /* Ensure this matches the height of your top-menu */
+}
+
+@media (max-width: 768px) {
+    .table-number h1 {
+        font-size: 1.5em;
+    }
+
+    .menu-box {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .dish-image {
+        width: 70%;
+    }
 }

@@ -33,11 +33,26 @@
             <!-- TABLE AND CART -->
 
 
-            <div class="scroll-dish">
-                <div class="card"><h2>Main Dish</h2></div>
-                <div class="card"><h2>Side Dish</h2></div>
-                <div class="card"><h2>Beverage</h2></div>
-            </div>
+            <?php 
+   
+                $sql = "SELECT * FROM food_category";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    echo '<div class="card-container">';
+                    while ($row = $result->fetch_assoc()) {
+                        $category_name = htmlspecialchars($row['category_name']);
+                        echo '<div class="card">
+                                <button>' . $category_name . '</button>
+                            </div>';
+                    }
+                    echo '</div>';
+                } else {
+                    echo "<p>No categories found</p>";
+                }
+            ?>
+
+
         </div>
 
         <div class="display-menu">            
