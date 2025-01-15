@@ -1,4 +1,5 @@
     <?php 
+        session_start();
         include "../connectdb.php";
         
         $tableNumber = isset($_GET['table_number']) ? $_GET['table_number'] : null;
@@ -49,6 +50,27 @@
                         firstButton.click(); // Simulate a click to load the first category
                     }
                 });
+
+                //popup in display_menu.php cause i hate myself enough to do this
+                function openPopup(dishName, dishDesc, dishPrice, dishImage) {
+                    document.getElementById('popupDishName').textContent = dishName;
+                    document.getElementById('popupDishDesc').textContent = dishDesc;
+                    document.getElementById('popupDishPrice').textContent = 'RM' + dishPrice;
+                    document.getElementById('popupDishImage').src = dishImage;
+                    
+                    document.getElementById('dishPopup').style.display = "block";
+                }
+
+                window.onclick = function(event) {
+                    if (event.target == document.getElementById('dishPopup')) {
+                        closePopup();
+                    }
+                }
+
+                function closePopup() {
+                    document.getElementById('dishPopup').style.display = "none";
+                }
+
             </script>
 
 

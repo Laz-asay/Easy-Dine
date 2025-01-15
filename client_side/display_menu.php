@@ -1,4 +1,5 @@
 <?php
+session_start();
 include "../connectdb.php";
 
 if (isset($_GET['q'])) {
@@ -17,7 +18,7 @@ if (isset($_GET['q'])) {
             $dishPrice = htmlspecialchars($row['dish_price']);
             $dishDesc = htmlspecialchars($row['dish_desc']);
             echo '  
-                    <div class="menu-box">
+                    <div class="menu-box" onclick="openPopup(\'' . $dishName . '\', \'' . $dishDesc . '\', \'' . $dishPrice . '\', \'' . $dishImage . '\')">
                         <div class="img-and-name">
                             <img src="' . $dishImage . '" alt="' . $dishName . '" class="dish-image">
                             <div class="name-and-price">
@@ -38,3 +39,15 @@ if (isset($_GET['q'])) {
 
 $conn->close();
 ?>
+
+<!-- POP POP POP UP  -->
+<div id="dishPopup" class="popup-modal">
+    <div class="popup-content">
+        <span class="close" onclick="closePopup()">&times;</span>
+        <img id="popupDishImage" src="" alt="Dish Image" class="popup-dish-image">
+        <h2 id="popupDishName"></h2>
+        <p id="popupDishDesc"></p>
+        <p id="popupDishPrice"></p>
+        <button class="add-to-cart">Add to Cart</button>
+    </div>
+</div>
