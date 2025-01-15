@@ -1,30 +1,32 @@
 //////////////////////ADD DISH POPUP ////////////////////////////
-const popup = document.getElementById('popup');
-const openPopupButton = document.querySelector('.open-popup');
-
-function toggleMenu() {
-    popup.classList.toggle('show');
-}
-
-openPopupButton.addEventListener('click', () => {
-    popup.classList.add('show');
-});
-
-window.addEventListener('click', (event) => {
-    // Close popup when clicking outside
-    if (!popup.contains(event.target) && !event.target.matches('.open-popup')) {
-        popup.classList.remove('show');
-    }
-});
-
-// Prevent click events inside popup-content from propagating to the window
-const popupContent = document.querySelector('.popup-content');
-popupContent.addEventListener('click', (event) => {
-    event.stopPropagation();
-});
-
 
 ////////////////////// END OF ADD DISH POPUP ////////////////////////////
+
+
+////////////////////// MANAGE TABLE POPUP ////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////// END OFMANAGE TABLE POPUP ////////////////////////////
+
+
+
+
 
 function showPopup(popupId) {
     document.getElementById(popupId).style.display = "flex";

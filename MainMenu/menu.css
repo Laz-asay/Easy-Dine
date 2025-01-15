@@ -65,179 +65,144 @@ body {
 
 /********************* Add dish popup **************************/
 
-.open-popup {
-    padding: 10px 20px;
-    background-color: #5a5a5a;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-}
-
-.open-popup:hover {
-    background-color: #f3f3f3;
-    color: black;
-}
-
-.close-popup {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #666;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.close-popup:hover {
-    color: #000;
-}
-
-
-.popup-container {
+.form-popup {
     display: none;
-    position: fixed;
+    justify-content: center;
+    position: absolute;
+    align-items: center;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+    z-index: 9999;
+    overflow: hidden;
 }
 
-.popup-container.show {
-    display: flex;
-}
-
-.popup-content {
-    background-color: black;
+/********* JAVASCRIPT OUTSIDE OF THIS BOX   *************/
+.form-background {
+    background-color: rgb(80, 80, 80);
     padding: 20px;
     border-radius: 10px;
-    width: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative;
 }
 
-
-.close-popup {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    cursor: pointer;
+.form-container {
+    width: 80%; /* Wider on larger screens */
+    max-width: 900px; /* Limit the width on large screens */
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-sizing: border-box;
+    border: 2px solid red;
 }
 
-.popup-form input {
-    background-color: black;
-    color: white;
-    display: block;
-    width: 95%;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid rgb(66, 66, 66);
-    border-radius: 5px;
-}
-
-.popup-form textarea {
-
-    background-color: black;
-    color: white;
-    display: block;
-    width: 95%;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid rgb(66, 66, 66);
-    border-radius: 5px;
-    resize: none;
-}
-
-.popup-form select {
-    background-color: black;
-    color: white;
-    display: block;
+.proper-order-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
     width: 100%;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid rgb(66, 66, 66);
-    border-radius: 5px;
 }
 
-.category-choose {
-    color: #666;
-}
-
-.popup-form input[type="submit"],
-.popup-form input[type="reset"] {
-    width: auto;
-    padding: 10px 20px;
-    cursor: pointer;
-    border: none;
-    color: white;
-    margin-right: 10px;
-}
-
-/* For every browser except firefox (no i will not do for firefox that is your problem if you use firefox) */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-/* CHOOSE FILE STYLE */
-.custom-file-input {
-    position: relative;
-    display: inline-block;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    margin-bottom: 15px;
-}
-
-.file-label {
-    display: inline-block;
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
+.form-container h1 {
     text-align: center;
-    transition: background-color 0.3s ease;
 }
 
-.file-label:hover {
-    background-color: #0056b3;
+.form-popup input[type="text"],
+.form-popup input[type="number"],
+.form-popup textarea,
+.form-popup select {
+    background-color: black;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
 }
 
-input[type="file"] {
+.file-upload {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+.form-popup input[type="file"] {
     display: none;
 }
 
-#file-name {
-    margin-left: 10px;
-    font-style: italic;
-    color: #666;
-}
-/* END OF CHOOSE FILE STYLE */
-
-
-.popup-form input[type="submit"] {
-    background-color: #007bff;
+.custom-file-input label {
+    color: #3e3d3d;
+    font-weight: lighter;
+    cursor: pointer;
 }
 
-.popup-form input[type="reset"] {
-    background-color: #dc3545;
+.form-popup .custom-file-input {
+    position: relative;
+    background-color: rgb(0, 153, 241);
+    color: white;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    padding: 8px;
 }
 
-.popup-form input[type="submit"]:hover {
-    background-color: #0056b3;
+.form-popup .custom-file-input input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
 }
 
-.popup-form input[type="reset"]:hover {
-    background-color: #c82333;
+.form-popup #file-name {
+    margin-left: 5px;
+    color: #ffffff;
+    font-size: 12px;
 }
+
+.form-popup textarea {
+    resize: none;
+}
+
+.add-dish-buttons {
+    margin-top: 10px;
+}
+
+.form-popup input[type="submit"],
+.form-popup input[type="reset"],
+.form-popup button.close-popup {
+    background-color: rgb(0, 185, 0);
+    margin-bottom: 5px;
+    width: 50%;
+    padding: 5px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-popup input[type="submit"]:hover,
+.form-popup input[type="reset"]:hover,
+.form-popup button.close-popup:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        width: 80%;
+        max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-container {
+        width: 90%;
+        padding: 10px;
+    }
+}
+
+
 /********************* END OF Add dish popup **************************/
 
 .table-management {
