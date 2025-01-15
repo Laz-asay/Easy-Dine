@@ -29,14 +29,14 @@ body {
     align-items: center;
     width: 100%;
     margin: 0;
-    padding: 0;
+    padding-right: 10px;
 }
 
 .cart-button {
     background: none;
     border: none;
     cursor: pointer;
-    margin-right: 1em;
+    margin-right: 2em;
 }
 
 .cart-button img {
@@ -68,7 +68,7 @@ body {
     overflow-x: auto;
     padding-left: 2em;
     padding-right: 2em;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: 1em;
     scrollbar-width: none; 
 }
@@ -76,7 +76,6 @@ body {
 .card-container::-webkit-scrollbar {
     display: none; 
 }
-
 
 .card {
     flex: 0 0 auto;
@@ -87,45 +86,23 @@ body {
     background-color: transparent;
     color: black;
     border: none;
-    border-radius: 0.5em;
-    font-size: 1    em;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-
-.menu-box {
-    margin-top: 1em;
-    padding: 1em;
-    background-color: white;
-    margin-bottom: 2em;
-    display: flex;
-    align-items: center;
-    border-radius: 0.5em;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
+.card button.active{
+    color: #944E63;
+    border-bottom: 1px solid #944E63;
 }
 
-.img-and-name {
-    display: flex;
-}
+/************************** MENU DISPLAY **************************/
 
-.name-and-price {
-    margin-top: 0;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-}
 
-.dish-image {
-    width: 40%;
-    height: auto;
-    border-radius: 0.5em;
-}
 
-.add-to-cart {
-    background: none;
-    border: none;
-}
+
+
+
+/********************** DONT BOTHER DOWN HERE *******************/
 
 .display-menu {
     margin-top: 90px; /* Ensure this matches the height of your top-menu */
