@@ -27,9 +27,10 @@ if (isset($_GET['q'])) {
                             <p class="dish-desc"><?php echo $dishDesc; ?></p>
                         </div>
                     </div>
-                    <button class="add-to-cart">
+                    <button class="add-to-cart" onclick="addToCart('<?php echo $dishID; ?>', '<?php echo $tableNumber; ?>')">
                         <img src="../images/icon-library/plus-60.png" alt="Add to Cart">
                     </button>
+
                 </div>
 <?php
 

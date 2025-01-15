@@ -96,5 +96,8 @@
         <div id="displayMenu" class="display-menu">
             <p>Loading Menu...</p>
         </div>
+
+        <script src="cart.js"></script>
+
     </body>
 </html>
