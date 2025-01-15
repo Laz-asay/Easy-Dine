@@ -42,6 +42,7 @@ body {
 .cart-button img {
     width: 35px;
     height: auto;
+    padding-right: 1em;
 }
 
 .table-number {
@@ -68,8 +69,8 @@ body {
     overflow-x: auto;
     padding-left: 2em;
     padding-right: 2em;
-    justify-content: flex-start;
-    gap: 1em;
+    justify-content: space-between;
+    gap: 1.5em;
     scrollbar-width: none; 
 }
 
@@ -83,16 +84,19 @@ body {
     }
 
 .card button {
-    padding: 0.5em 1em;
+    padding: 0 0.3em 0.3em 0.3em;
     background-color: transparent;
     color: black;
     border: none;
-    border-radius: 0.5em;
     font-size: 1    em;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
+.card button.active {
+    color: #944E63;
+    border-bottom: 2px solid #944E63;
+}
 
 .menu-box {
     margin-top: 1em;
