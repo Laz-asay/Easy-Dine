@@ -9,26 +9,26 @@ if (isset($_GET['q'])) {
     $stmt->execute();
     $result = $stmt->get_result();
 
+    echo '<div class="menu-grid">';
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $dishName = htmlspecialchars($row['dish_name']);
             $dishImage = "../images/mainmenu/" . $row['dish_image'];
             $dishPrice = htmlspecialchars($row['dish_price']);
             $dishDesc = htmlspecialchars($row['dish_desc']);
-            echo '<div class="menu-box">
-                    <div class="img-and-name">
-                        <img src="' . $dishImage . '" alt="' . $dishName . '" class="dish-image">
-                        <div class="name-and-price">
-                            <h2>' . $dishName . '</h2>
-                            <p class="dish-price">RM' . $dishPrice . '</p>
+            echo '  
+                    <div class="menu-box">
+                        <div class="img-and-name">
+                            <img src="' . $dishImage . '" alt="' . $dishName . '" class="dish-image">
+                            <div class="name-and-price">
+                                <h2 class="dish-name">' . $dishName . '</h2>
+                                <p class="dish-price">RM' . $dishPrice . '</p>
+                            </div>
                         </div>
                     </div>
-                    <p class="dish-desc">' . $dishDesc . '</p>
-                    <button class="add-to-cart">
-                        <img src="../images/icon-library/plus-60.png" alt="Add to Cart">
-                    </button>
-                  </div>';
+                  ';
         }
+        echo '</div>';
     } else {
         echo "<p>No available dishes in this category.</p>";
     }
