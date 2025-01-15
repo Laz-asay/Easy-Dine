@@ -13,6 +13,25 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+        <script>
+            function loadCategory(str) {
+                var xhttp;
+                if (str == "") {
+                    document.getElementById("displayMenu").innerHTML = "<p>Please select a category.</p>";
+                    return;
+                }
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("displayMenu").innerHTML = this.responseText;
+                    }
+                };
+                xhttp.open("GET", "display_menu.php?q=" + encodeURIComponent(str), true);
+                xhttp.send();
+            }
+        </script>
+
     </head>
     <body>
         <div class="head-menu">
@@ -43,7 +62,7 @@
                     while ($row = $result->fetch_assoc()) {
                         $category_name = htmlspecialchars($row['category_name']);
                         echo '<div class="card">
-                                <button>' . $category_name . '</button>
+                                <button onclick="loadCategory(\'' . $category_name . '\')">' . $category_name . '</button>
                             </div>';
                     }
                     echo '</div>';

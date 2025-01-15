@@ -1,5 +1,5 @@
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Mona Sans', sans-serif;
     background-color: #D9D9D9;
     color: black;
     padding: 0;
@@ -70,7 +70,13 @@ body {
     padding-right: 2em;
     justify-content: flex-start;
     gap: 1em;
+    scrollbar-width: none; 
 }
+
+.card-container::-webkit-scrollbar {
+    display: none; 
+}
+
 
 .card {
     flex: 0 0 auto;
@@ -78,18 +84,15 @@ body {
 
 .card button {
     padding: 0.5em 1em;
-    background-color: #944E63;
-    color: white;
+    background-color: transparent;
+    color: black;
     border: none;
     border-radius: 0.5em;
-    font-size: 1.2em;
+    font-size: 1    em;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.card button:hover {
-    background-color: #7c3d53;
-}
 
 .menu-box {
     margin-top: 1em;
