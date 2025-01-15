@@ -29,14 +29,14 @@ body {
     align-items: center;
     width: 100%;
     margin: 0;
-    padding-right: 10px;
+    padding: 0;
 }
 
 .cart-button {
     background: none;
     border: none;
     cursor: pointer;
-    margin-right: 2em;
+    margin-right: 1em;
 }
 
 .cart-button img {
@@ -68,7 +68,7 @@ body {
     overflow-x: auto;
     padding-left: 2em;
     padding-right: 2em;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 1em;
     scrollbar-width: none; 
 }
@@ -76,6 +76,7 @@ body {
 .card-container::-webkit-scrollbar {
     display: none; 
 }
+
 
 .card {
     flex: 0 0 auto;
@@ -86,23 +87,45 @@ body {
     background-color: transparent;
     color: black;
     border: none;
+    border-radius: 0.5em;
+    font-size: 1    em;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-.card button.active{
-    color: #944E63;
-    border-bottom: 1px solid #944E63;
+
+.menu-box {
+    margin-top: 1em;
+    padding: 1em;
+    background-color: white;
+    margin-bottom: 2em;
+    display: flex;
+    align-items: center;
+    border-radius: 0.5em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
 }
 
-/************************** MENU DISPLAY **************************/
+.img-and-name {
+    display: flex;
+}
 
+.name-and-price {
+    margin-top: 0;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
 
+.dish-image {
+    width: 40%;
+    height: auto;
+    border-radius: 0.5em;
+}
 
-
-
-
-/********************** DONT BOTHER DOWN HERE *******************/
+.add-to-cart {
+    background: none;
+    border: none;
+}
 
 .display-menu {
     margin-top: 90px; /* Ensure this matches the height of your top-menu */

@@ -13,88 +13,104 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
         <script>
-            function loadCategory(categoryName, buttonElement) {
+            function loadCategory(str) {
                 var xhttp;
-
-                // Clear the active state from all buttons
-                var buttons = document.querySelectorAll(".card button");
-                buttons.forEach(function(button) {
-                    button.classList.remove("active");
-                });
-
-                // Add the active class to the clicked button
-                buttonElement.classList.add("active");
-
-                // Load the category's food menu via AJAX
-                if (categoryName == "") {
-                    document.getElementById("displayMenu").innerHTML = "";
+                if (str == "") {
+                    document.getElementById("displayMenu").innerHTML = "<p>Please select a category.</p>";
                     return;
                 }
                 xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
+                xhttp.onreadystatechange = function () {
                     if (this.readyState == 4 && this.status == 200) {
                         document.getElementById("displayMenu").innerHTML = this.responseText;
                     }
                 };
-                xhttp.open("GET", "display_menu.php?q=" + encodeURIComponent(categoryName), true);
+                xhttp.open("GET", "display_menu.php?q=" + encodeURIComponent(str), true);
                 xhttp.send();
             }
-
-
-            // Automatically load the first category when the page loads
-            document.addEventListener("DOMContentLoaded", function () {
-                var firstButton = document.querySelector(".card button");
-                if (firstButton) {
-                    firstButton.click(); // Simulate a click on the first category
-                }
-            });
-
         </script>
+
     </head>
     <body>
         <div class="head-menu">
             <!-- TABLE AND CART -->
             <div class="top-menu">
+                <!-- Table List -->
                 <div class="table-number">
-                    <h1>Table <span class="table-number-colour"><?php echo htmlspecialchars($tableNumber); ?></span></h1>
+                    <h1>Table <span class="table-number-colour"><?php echo htmlspecialchars($tableNumber); ?></span> </h1>
                     <a>Let's get your order</a>
                 </div>
+
                 <div class="shopping-cart">
                     <button class="cart-button">
                         <a href="shopping_cart.php"><img src="../images/icon-library/cart-48.png"></a>
                     </button>
                 </div>
             </div>
-            <!-- Categories -->
-            <?php 
-                $firstCategoryName = null;
+            <!-- TABLE AND CART -->
 
-                $sql = "SELECT * FROM food_category ORDER BY Category_ID ASC";
+
+            <?php 
+   
+                $sql = "SELECT * FROM food_category";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
                     echo '<div class="card-container">';
                     while ($row = $result->fetch_assoc()) {
-                        $categoryName = htmlspecialchars($row['category_name']);
-                        if (!$firstCategoryName) {
-                            $firstCategoryName = $categoryName; // Capture the first category name
-                        }
+                        $category_name = htmlspecialchars($row['category_name']);
                         echo '<div class="card">
-                                <button onclick="loadCategory(\'' . $categoryName . '\', this)">' . $categoryName . '</button>
+                                <button onclick="loadCategory(\'' . $category_name . '\')">' . $category_name . '</button>
                             </div>';
                     }
                     echo '</div>';
-
                 } else {
                     echo "<p>No categories found</p>";
                 }
             ?>
 
+
         </div>
 
-        <div id="displayMenu" class="display-menu">
-            <p>Loading Menu...</p>
+        <div class="display-menu">            
+                <?php 
+                $sql = "SELECT * FROM menu WHERE dish_availability = 'available'"; 
+                $result = $conn->query($sql);
+        
+
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $dishName = htmlspecialchars($row['dish_name']);
+                        $dishImage = "../images/mainmenu/" . $row['dish_image'];
+                        $dishPrice = htmlspecialchars($row['dish_price']);
+                        $dishDesc = htmlspecialchars($row['dish_desc']);
+                ?>
+
+                <div class="menu-box">
+                    <div class="img-and-name">
+                        <img src="<?php echo $dishImage; ?>" alt="<?php echo $dishName; ?>" class="dish-image">
+                            <div class="name-and-price">
+                                <h2><?php echo $dishName; ?></h2>
+                                <p class="dish-price">RM<?php echo $dishPrice; ?></p>
+                            </div>
+                    </div>
+
+                    <p class="dish-desc"><?php echo $dishDesc; ?></p>
+                    <button class="add-to-cart">
+                        <img src="../images/icon-library/plus-60.png" alt="Add to Cart">
+                    </button>
+                </div>
+
+                <?php
+                    }
+                } else {
+                    echo "<p>No available Main Dishes at the moment.</p>";
+                }
+
+                $conn->close();
+                ?>          
         </div>
     </body>
 </html>

@@ -2,10 +2,9 @@
 include "../connectdb.php";
 
 if (isset($_GET['q'])) {
-    $categoryName = $_GET['q'];
-
+    $category = $_GET['q'];
     $stmt = $conn->prepare("SELECT * FROM menu WHERE dish_category = ? AND dish_availability = 'available'");
-    $stmt->bind_param("s", $categoryName);
+    $stmt->bind_param("s", $category);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -15,24 +14,19 @@ if (isset($_GET['q'])) {
             $dishImage = "../images/mainmenu/" . $row['dish_image'];
             $dishPrice = htmlspecialchars($row['dish_price']);
             $dishDesc = htmlspecialchars($row['dish_desc']);
-?>
-                <div class="menu-box">
-                    <div class="img-and-details">
-                        <img src="<?php echo $dishImage; ?>" alt="<?php echo $dishName; ?>" class="dish-image">
-                        <div class="details">
-                            <div class="name-and-price">
-                                <h2 class="dish-name"><?php echo $dishName; ?></h2>
-                                <p class="dish-price">RM<?php echo $dishPrice; ?></p>
-                            </div>
-                            <p class="dish-desc"><?php echo $dishDesc; ?></p>
+            echo '<div class="menu-box">
+                    <div class="img-and-name">
+                        <img src="' . $dishImage . '" alt="' . $dishName . '" class="dish-image">
+                        <div class="name-and-price">
+                            <h2>' . $dishName . '</h2>
+                            <p class="dish-price">RM' . $dishPrice . '</p>
                         </div>
                     </div>
+                    <p class="dish-desc">' . $dishDesc . '</p>
                     <button class="add-to-cart">
                         <img src="../images/icon-library/plus-60.png" alt="Add to Cart">
                     </button>
-                </div>
-<?php
-
+                  </div>';
         }
     } else {
         echo "<p>No available dishes in this category.</p>";
@@ -41,7 +35,5 @@ if (isset($_GET['q'])) {
     $stmt->close();
 }
 
-
 $conn->close();
 ?>
-    
