@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="display_menu.css">
+        <link rel="stylesheet" href="display_menu2.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
@@ -56,22 +56,25 @@
                         <td><?php echo htmlspecialchars($dish_desc); ?></td>
                         <td><?php echo htmlspecialchars($dish_price); ?></td>
                         <td>
-                            <!-- Edit Form -->
-                            <form action="edit_dish.php" method="GET" style="display:inline;">
-                                <input type="hidden" name="dish_name" value="<?php echo htmlspecialchars($dish_name); ?>">
-                                <button type="submit" class="edit-menu">
-                                    <i class="fa fa-edit"></i> Edit
-                                </button>
-                            </form>
-                            
-                            <!-- Delete Form -->
-                            <form action="delete_dish.php" method="POST" style="display:inline;">
-                                <input type="hidden" name="dish_name" value="<?php echo htmlspecialchars($dish_name); ?>">
-                                <button type="submit" class="delete-menu" 
-                                    onclick="return confirm('Are you sure you want to delete this dish?');"> 
-                                    <i class="fa fa-trash"></i> Delete
-                                </button>
-                            </form>
+                            <div class="action-buttons">
+                                <!-- Edit Form -->
+                                <form action="edit_dish.php" method="GET" style="display:inline;">
+                                    <input type="hidden" name="dish_name" value="<?php echo htmlspecialchars($dish_name); ?>">
+                                    <button type="submit" class="edit-menu">
+                                        <i class="fa fa-edit"></i> 
+                                    </button>
+                                </form>
+                                
+                                <!-- Delete Form -->
+                                <form action="delete_dish.php" method="POST" style="display:inline;">
+                                    <input type="hidden" name="dish_name" value="<?php echo htmlspecialchars($dish_name); ?>">
+                                    <button type="submit" class="delete-menu" 
+                                        onclick="return confirm('Are you sure you want to delete this dish?');"> 
+                                        <i class="fa fa-trash"></i> 
+                                    </button>
+                                </form>
+                            </div>
+
                         </td>
                     </tr>
 

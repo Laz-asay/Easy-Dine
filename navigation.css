@@ -5,11 +5,14 @@
     position: fixed;
     top: 0;
     left: 0;
-    background-color: #000000;
-    color: rgb(161, 161, 161);
+    background-color: #081028;
+    color: #AEB9E1;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     font-weight: bold;
+    font-size: 8pt;
+    border: 1px solid #0B1739;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3); 
 }
 
 .sidebar-header {
@@ -30,14 +33,13 @@
     font-size: 12pt;
     background: none;
     border: none;
-    color: rgb(161, 161, 161);
+    color: #AEB9E1;
     text-align: left;
     cursor: pointer;
-    text-align: center;
+    text-align: left;
     padding: 10px;
     width: 90%;
     margin: 0 auto 5px auto;
-    font-weight: bold;
 
 }
 
@@ -50,9 +52,9 @@
 /* BREAK */
 hr {
     border: none;
-    height: 2px;
+    height: 1px;
     background-color: rgb(161, 161, 161);
-    width: 80%;
+    width: 90%;
 }
 /* END OF BREAK */
 
@@ -77,13 +79,12 @@ hr {
     font-size: 12pt;
     background: none;
     border: none;
-    color: rgb(161, 161, 161);
+    color: #AEB9E1;
     text-align: left;
     cursor: pointer;
     margin-bottom: 5px;
     padding: 10px;
     width: 100%;
-    font-weight: bold;
 }
 
 .category-edit i {

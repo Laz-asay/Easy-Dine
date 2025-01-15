@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../navigation.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" 
@@ -224,7 +224,11 @@
         </div>
                             
         <!----- POPUP BUTTON ---->
-        <button class="open-popup" onclick="openForm()">Add Dish</button>
+        <div class="popup-buttons-group">
+            <button class="popup-buttons" onclick="openForm()">Add Dish</button>
+            <button class="popup-buttons" onclick="openTable()">Table edit</button>
+        </div>
+
 
         <!-- -------------------------ADD DISH FORM ----------------------------->
         <!-- Popup Form -->
@@ -293,6 +297,7 @@
                 const fileName = document.getElementById("file-name");
                 fileName.textContent = this.files[0] ? this.files[0].name : "No file chosen";
             });
+
 
 
         </script>
