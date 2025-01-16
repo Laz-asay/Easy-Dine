@@ -19,6 +19,8 @@ if ($tableNumber === null) {
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 
         <script>
             function loadCategory(categoryName, buttonElement) {
@@ -58,13 +60,24 @@ if ($tableNumber === null) {
 
             //popup in display_menu.php cause i hate myself enough to do this
             function openPopup(dishName, dishDesc, dishPrice, dishImage) {
+                var popup = document.getElementById('dishPopup');
+                
+                // Set the content of the popup
                 document.getElementById('popupDishName').textContent = dishName;
                 document.getElementById('popupDishDesc').textContent = dishDesc;
                 document.getElementById('popupDishPrice').textContent = 'RM' + dishPrice;
                 document.getElementById('popupDishImage').src = dishImage;
+
+                // Show the popup and apply the fade-in effect
+                popup.style.display = "block";
+                popup.classList.add('fade-in');
                 
-                document.getElementById('dishPopup').style.display = "block";
+                // Remove the fade-in class after the animation is complete
+                setTimeout(function() {
+                    popup.classList.remove('fade-in');
+                }, 500); // Match the animation duration
             }
+
 
             window.onclick = function(event) {
                 if (event.target == document.getElementById('dishPopup')) {
@@ -73,12 +86,50 @@ if ($tableNumber === null) {
             }
 
             function closePopup() {
-                document.getElementById('dishPopup').style.display = "none";
+                var popup = document.getElementById('dishPopup');
+                
+                // Add the fade-out class to trigger the animation
+                popup.classList.add('fade-out');
+                
+                // Wait for the animation to complete before hiding the popup
+                setTimeout(function() {
+                    popup.style.display = "none"; // Hide the popup after animation
+                    popup.classList.remove('fade-out'); // Remove the fade-out class for future use
+                }, 500); // Timeout duration should match the animation duration (500ms)
             }
+
 
             /////////////////////////////////////////////// CART ITEM /////////////////////////////////////////////////////////
 
-            let cart = []; // Array to store cart items
+            // Array to store cart items (you may initialize this globally if not already defined)
+            let cart = [];
+
+            function addToCart() {
+                // Get the item details from the popup
+                const dishName = document.getElementById("popupDishName").textContent;
+                const dishPrice = parseFloat(document.getElementById("popupDishPrice").textContent.replace("RM", ""));
+
+                // Check if the item is already in the cart
+                const existingItem = cart.find(item => item.name === dishName);
+
+                if (existingItem) {
+                    // If the item is already in the cart, increase its quantity
+                    existingItem.quantity += 1;
+                } else {
+                    // Otherwise, add the new item to the cart
+                    cart.push({ name: dishName, price: dishPrice, quantity: 1 });
+                }
+
+                // Update the cart badge with the total quantity of items
+                const totalQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+                updateCartQuantity(totalQuantity);
+
+                // Show notification
+                showNotification(`${dishName} has been added to your cart.`);
+
+                // Close the dish popup
+                closePopup();
+            }
 
             function openCart() {
                 const cartPopup = document.getElementById("cartPopup");
@@ -121,25 +172,21 @@ if ($tableNumber === null) {
                 document.getElementById("cartPopup").style.display = "none";
             }
 
-            function addToCart() {
-                // Get the item details from the popup
-                const dishName = document.getElementById("popupDishName").textContent;
-                const dishPrice = parseFloat(document.getElementById("popupDishPrice").textContent.replace("RM", ""));
+            function updateCartQuantity(quantity) {
+                const cartBadge = document.getElementById('cartQuantity');
 
-                // Check if the item is already in the cart
-                const existingItem = cart.find(item => item.name === dishName);
-
-                if (existingItem) {
-                    // If the item is already in the cart, increase its quantity
-                    existingItem.quantity += 1;
+                if (quantity > 0) {
+                    cartBadge.textContent = quantity; // Set the quantity
+                    cartBadge.style.display = "flex"; // Make sure it's visible
                 } else {
-                    // Otherwise, add the new item to the cart
-                    cart.push({ name: dishName, price: dishPrice, quantity: 1 });
+                    cartBadge.style.display = "none"; // Hide the badge if the cart is empty
                 }
-
-                alert(`${dishName} has been added to your cart.`);
-                closePopup(); // Close the dish popup
             }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const cart = JSON.parse(sessionStorage.cart || "[]");
+                updateCartQuantity(cart.length);
+            });
 
             function removeFromCart(index) {
                 // Remove the item at the specified index
@@ -161,6 +208,32 @@ if ($tableNumber === null) {
                 closeCart(); // Close the cart popup
             }
 
+            // Function to show a notification at the bottom of the page
+            function showNotification(dishName) {
+                // Create a div for the notification
+                const notification = document.createElement('div');
+                notification.classList.add('notification');
+                notification.textContent = `${dishName} has been added to your cart.`;
+
+                // Append the notification to the body
+                document.body.appendChild(notification);
+
+                // Trigger the animation by adding the 'show' class
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 10); // Slight delay to allow animation to trigger
+
+                // Remove the notification after 3 seconds
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    // Remove the notification from the DOM after it fades out
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 500); // Wait for fade-out to complete before removing
+                }, 3000); // 3 seconds for the notification to stay visible
+            }
+
+
         </script>
 
 
@@ -178,6 +251,7 @@ if ($tableNumber === null) {
                 <div class="shopping-cart">
                     <button class="cart-button" onclick="openCart()">
                         <img src="../images/icon-library/cart-48.png">
+                        <span id="cartQuantity" class="cart-badge">0</span>
                     </button>
                 </div>
             </div>
@@ -216,7 +290,9 @@ if ($tableNumber === null) {
         <!-- Cart Popup -->
         <div id="cartPopup" class="cart-popup-modal">
             <div class="cart-popup-content">
-                <span class="close" onclick="closeCart()">&times;</span>
+                <button class="close" onclick="closeCart()">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </button>
                 <h2>Your Cart</h2>
                 <div id="cartItems">
                     <!-- Items will be displayed here dynamically -->

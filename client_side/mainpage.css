@@ -32,7 +32,27 @@ body {
     padding: 0;
 }
 
+/* Badge for the cart quantity */
+.cart-badge {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background-color: red;
+    color: white;
+    font-size: 0.8em;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    pointer-events: none; /* Make the badge non-interactive */
+}
+
 .cart-button {
+    position: relative; /* Required to position the badge relative to the button */
     background: none;
     border: none;
     cursor: pointer;
@@ -44,6 +64,7 @@ body {
     height: auto;
     padding-right: 1em;
 }
+
 
 .table-number {
     font-weight: bold;
@@ -214,8 +235,9 @@ body {
     }
 }
 
+
 /*************** THANK GOD FOR CHATGPT CAUSE WHAT THE HELLLLLLLLLL ******************/
-/********************************** POPUP BTW ***************************************/
+/********************************** MENU DISPLAY POPUP BTW ***************************************/
 
 .popup-modal {
     display: none;               
@@ -274,6 +296,35 @@ body {
     font-size: 1.2em;
 }
 
+/* CSS for the fade-out effect when closing the popup */
+.fade-out {
+    animation: fadeOut 0.5s ease-out forwards;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* CSS for fade-in effect when opening the popup */
+.fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+
 /********************************** END OF POPUP BTW ***************************************/
 
 
@@ -300,13 +351,35 @@ body {
     width: 80%;
     max-width: 500px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative; /* Needed for absolute positioning of the close button */
+    animation: slideDown 0.3s ease-in-out;
+}
+
+/* Keyframes for sliding down */
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%); /* Start above the viewport */
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0); /* End at its original position */
+        opacity: 1;
+    }
 }
 
 .cart-popup-content .close {
-    font-size: 20px;
-    font-weight: bold;
-    float: right;
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    font-size: 24px;
+    background: none;
+    border: none;
     cursor: pointer;
+    color: #333;
+}
+
+.cart-popup-content .close:hover {
+    color: #ff4d4d;
 }
 
 .cart-popup-content h2 {
@@ -330,13 +403,15 @@ body {
 }
 
 .checkout-button {
+    width: 70%;
     display: block;
-    margin: 20px auto;
+    margin: 10px auto;
+    margin-top: 4px !important;
     padding: 10px 20px;
-    background-color: #007BFF;
+    background-color: #944E63;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
 }
 
@@ -345,3 +420,27 @@ body {
 }
 
 /******************************** END OF    CART STYLE ***********************************/
+
+/* CSS for the notification */
+.notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #944E63; /* Green background */
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    z-index: 10000;
+}
+
+.notification.show {
+    opacity: 1;
+    visibility: visible;
+}
+
