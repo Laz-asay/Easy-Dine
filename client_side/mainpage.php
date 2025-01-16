@@ -1,4 +1,4 @@
-<?php
+<?php 
 include "../connectdb.php";
 include "session.php";
 $tableNumber = isset($_SESSION['table_number']) ? $_SESSION['table_number'] : null;
@@ -7,49 +7,8 @@ if ($tableNumber === null) {
     echo "No table number found. Please select a table on the previous page.";
     exit;
 }
-
-// Initialize cart if it doesn't exist in the session
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
-
-// Add item to cart
-if (isset($_POST['action']) && $_POST['action'] == 'add') {
-    $dishName = $_POST['dishName'];
-    $dishPrice = $_POST['dishPrice'];
-
-    // Check if the item is already in the cart
-    $found = false;
-    foreach ($_SESSION['cart'] as &$item) {
-        if ($item['name'] == $dishName) {
-            $item['quantity']++;
-            $found = true;
-            break;
-        }
-    }
-
-    if (!$found) {
-        $_SESSION['cart'][] = ['name' => $dishName, 'price' => $dishPrice, 'quantity' => 1];
-    }
-
-    // Redirect to update the page
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
-}
-
-// Remove item from cart
-if (isset($_POST['action']) && $_POST['action'] == 'remove') {
-    $index = $_POST['index'];
-    unset($_SESSION['cart'][$index]);
-
-    // Reindex array
-    $_SESSION['cart'] = array_values($_SESSION['cart']);
-
-    // Redirect to update the page
-    header("Location: " . $_SERVER['PHP_SELF']);
-    exit;
-}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -62,17 +21,220 @@ if (isset($_POST['action']) && $_POST['action'] == 'remove') {
         <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
+
         <script>
+            function loadCategory(categoryName, buttonElement) {
+                var xhttp;
+
+                // Clear the active state from all buttons
+                var buttons = document.querySelectorAll(".card button");
+                buttons.forEach(function(button) {
+                    button.classList.remove("active");
+                });
+
+                // Add the active class to the clicked button
+                buttonElement.classList.add("active");
+
+                // Load the category's food menu via AJAX
+                if (categoryName === "") {
+                    document.getElementById("displayMenu").innerHTML = "";
+                    return;
+                }
+                xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        document.getElementById("displayMenu").innerHTML = this.responseText;
+                    }
+                };
+                xhttp.open("GET", "display_menu.php?q=" + encodeURIComponent(categoryName), true);
+                xhttp.send();
+            }
+
+            // Automatically load the first category when the page loads
+            document.addEventListener("DOMContentLoaded", function() {
+                var firstButton = document.querySelector(".card button");
+                if (firstButton) {
+                    firstButton.click(); // Simulate a click to load the first category
+                }
+            });
+
+            //popup in display_menu.php cause i hate myself enough to do this
+            function openPopup(dishName, dishDesc, dishPrice, dishImage) {
+                var popup = document.getElementById('dishPopup');
+                
+                // Set the content of the popup
+                document.getElementById('popupDishName').textContent = dishName;
+                document.getElementById('popupDishDesc').textContent = dishDesc;
+                document.getElementById('popupDishPrice').textContent = 'RM' + dishPrice;
+                document.getElementById('popupDishImage').src = dishImage;
+
+                // Show the popup and apply the fade-in effect
+                popup.style.display = "block";
+                popup.classList.add('fade-in');
+                
+                // Remove the fade-in class after the animation is complete
+                setTimeout(function() {
+                    popup.classList.remove('fade-in');
+                }, 500); // Match the animation duration
+            }
+
+
+            window.onclick = function(event) {
+                if (event.target == document.getElementById('dishPopup')) {
+                    closePopup();
+                }
+            }
+
+            function closePopup() {
+                var popup = document.getElementById('dishPopup');
+                
+                // Add the fade-out class to trigger the animation
+                popup.classList.add('fade-out');
+                
+                // Wait for the animation to complete before hiding the popup
+                setTimeout(function() {
+                    popup.style.display = "none"; // Hide the popup after animation
+                    popup.classList.remove('fade-out'); // Remove the fade-out class for future use
+                }, 500); // Timeout duration should match the animation duration (500ms)
+            }
+
+
+            /////////////////////////////////////////////// CART ITEM /////////////////////////////////////////////////////////
+
+            function addToCart() {
+                // Get the item details from the popup
+                const dishName = document.getElementById("popupDishName").textContent;
+                const dishPrice = parseFloat(document.getElementById("popupDishPrice").textContent.replace("RM", ""));
+
+                // Send AJAX request to add item to cart in PHP session
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Update the cart display on success
+                        const totalQuantity = parseInt(this.responseText);
+                        updateCartQuantity(totalQuantity);
+                    }
+                };
+                xhttp.open("GET", "add_to_cart.php?dishName=" + encodeURIComponent(dishName) + "&dishPrice=" + encodeURIComponent(dishPrice), true);
+                xhttp.send();
+            }
+
+
             function openCart() {
-                var cartPopup = document.getElementById("cartPopup");
+                const cartPopup = document.getElementById("cartPopup");
+                const cartItemsContainer = document.getElementById("cartItems");
+                const cartTotal = document.getElementById("cartTotal");
+
+                // Send AJAX request to get cart items from the PHP session
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        const response = JSON.parse(this.responseText);
+                        cartItemsContainer.innerHTML = "";
+                        
+                        if (response.items.length === 0) {
+                            cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+                            cartTotal.textContent = "RM0.00";
+                        } else {
+                            let total = 0;
+                            response.items.forEach((item) => {
+                                total += item.price * item.quantity;
+                                const cartItem = document.createElement("div");
+                                cartItem.className = "cart-item";
+                                cartItem.innerHTML = `
+                                    <span>${item.name} x ${item.quantity}</span>
+                                    <span>RM${(item.price * item.quantity).toFixed(2)}</span>
+                                    <button onclick="removeFromCart('${item.name}')">Remove</button>
+                                `;
+                                cartItemsContainer.appendChild(cartItem);
+                            });
+
+                            cartTotal.textContent = `RM${total.toFixed(2)}`;
+                        }
+                    }
+                };
+                xhttp.open("GET", "get_cart.php", true);
+                xhttp.send();
+
+                // Display the popup
                 cartPopup.style.display = "block";
             }
 
             function closeCart() {
-                var cartPopup = document.getElementById("cartPopup");
-                cartPopup.style.display = "none";
+                document.getElementById("cartPopup").style.display = "none";
             }
+
+            function updateCartQuantity(quantity) {
+                const cartBadge = document.getElementById('cartQuantity');
+
+                if (quantity > 0) {
+                    cartBadge.textContent = quantity; // Set the quantity
+                    cartBadge.style.display = "flex"; // Make sure it's visible
+                } else {
+                    cartBadge.style.display = "none"; // Hide the badge if the cart is empty
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const cart = JSON.parse(sessionStorage.cart || "[]");
+                updateCartQuantity(cart.length);
+            });
+
+            function removeFromCart(dishName) {
+                // Send AJAX request to remove item from cart in PHP session
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        const totalQuantity = parseInt(this.responseText);
+                        updateCartQuantity(totalQuantity);
+                        openCart(); // Refresh cart display
+                    }
+                };
+                xhttp.open("GET", "remove_from_cart.php?dishName=" + encodeURIComponent(dishName), true);
+                xhttp.send();
+            }
+
+
+            function checkout() {
+                if (cart.length === 0) {
+                    alert("Your cart is empty. Add some items before checking out.");
+                    return;
+                }
+
+                // You can handle checkout logic here (e.g., send the cart data to the server)
+                alert("Thank you for your order!");
+                cart = []; // Clear the cart
+                closeCart(); // Close the cart popup
+            }
+
+            // Function to show a notification at the bottom of the page
+            function showNotification(dishName) {
+                // Create a div for the notification
+                const notification = document.createElement('div');
+                notification.classList.add('notification');
+                notification.textContent = `${dishName} has been added to your cart.`;
+
+                // Append the notification to the body
+                document.body.appendChild(notification);
+
+                // Trigger the animation by adding the 'show' class
+                setTimeout(() => {
+                    notification.classList.add('show');
+                }, 10); // Slight delay to allow animation to trigger
+
+                // Remove the notification after 3 seconds
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    // Remove the notification from the DOM after it fades out
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 500); // Wait for fade-out to complete before removing
+                }, 3000); // 3 seconds for the notification to stay visible
+            }
+
+
         </script>
+
 
     </head>
     <body>
@@ -88,14 +250,15 @@ if (isset($_POST['action']) && $_POST['action'] == 'remove') {
                 <div class="shopping-cart">
                     <button class="cart-button" onclick="openCart()">
                         <img src="../images/icon-library/cart-48.png">
-                        <span id="cartQuantity" class="cart-badge"><?php echo count($_SESSION['cart']); ?></span>
+                        <span id="cartQuantity" class="cart-badge">0</span>
                     </button>
                 </div>
             </div>
             <!-- END OF TABLE AND CART -->
 
+
             <?php 
-                $sql = "SELECT * FROM food_category ORDER BY Category_ID ASC";
+                $sql = "SELECT * FROM food_category ORDER BY Category_ID ASC"; // Order by category_name
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -114,10 +277,13 @@ if (isset($_POST['action']) && $_POST['action'] == 'remove') {
                     echo "<p>No categories found</p>";
                 }
             ?>
+
+
+
         </div>
 
-        <div class="display-menu" id="displayMenu">             
-            <!-- Menu content loaded by AJAX -->
+        <div class="display-menu" id="displayMenu">            
+
         </div>
 
         <!-- Cart Popup -->
@@ -128,36 +294,17 @@ if (isset($_POST['action']) && $_POST['action'] == 'remove') {
                 </button>
                 <h2>Your Cart</h2>
                 <div id="cartItems">
-                    <?php
-                        if (count($_SESSION['cart']) > 0) {
-                            $total = 0;
-                            foreach ($_SESSION['cart'] as $index => $item) {
-                                $total += $item['price'] * $item['quantity'];
-                                echo "<div class='cart-item'>
-                                        <span>{$item['name']} x {$item['quantity']}</span>
-                                        <span>RM" . number_format($item['price'] * $item['quantity'], 2) . "</span>
-                                        <form action='" . $_SERVER['PHP_SELF'] . "' method='POST'>
-                                            <input type='hidden' name='action' value='remove'>
-                                            <input type='hidden' name='index' value='{$index}'>
-                                            <button type='submit'>Remove</button>
-                                        </form>
-                                      </div>";
-                            }
-                            echo "<div class='cart-total'>
-                                    <h3>Total: <span>RM" . number_format($total, 2) . "</span></h3>
-                                  </div>";
-                        } else {
-                            echo "<p>Your cart is empty.</p>";
-                        }
-                    ?>
+                    <!-- Items will be displayed here dynamically -->
+                </div>
+                <div class="cart-total">
+                    <h3>Total: <span id="cartTotal">RM0.00</span></h3>
                 </div>
                 <button class="checkout-button" onclick="checkout()">Checkout</button>
             </div>
         </div>
 
-        <script>
-            // Update the cart quantity dynamically
-            document.getElementById('cartQuantity').textContent = <?php echo count($_SESSION['cart']); ?>;
-        </script>
+
+        <script src="cart.js"></script>
+
     </body>
 </html>

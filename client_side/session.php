@@ -28,4 +28,7 @@ if (!in_array($currentPage, $excludedPages)) {
         exit();
     }
 }
-?>
+
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
