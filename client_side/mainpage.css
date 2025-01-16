@@ -211,10 +211,6 @@ body {
 
 
 
-.add-to-cart {
-    background: none;
-    border: none;
-}
 
 .display-menu {
     margin-top: 90px; /* Ensure this matches the height of your top-menu */
@@ -238,6 +234,25 @@ body {
 
 /*************** THANK GOD FOR CHATGPT CAUSE WHAT THE HELLLLLLLLLL ******************/
 /********************************** MENU DISPLAY POPUP BTW ***************************************/
+
+.action-buttons {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.add-to-cart {
+    background: none;
+    border: none;
+    background-color: #944E63;
+    padding: 10px;
+    color: white;
+    border-radius: 20px;
+    margin: 0 auto;
+    display: block;
+    margin-top: 15px;
+    width: 50%;
+}
 
 .popup-modal {
     display: none;               
