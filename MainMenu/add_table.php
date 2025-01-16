@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         for ($i = 1; $i <= $numberOfTables; $i++) {
             $tableNumber = $i;
 
-            $qrCodeUrl = "http://localhost:8050/table_page.php?table_number=$tableNumber";
+            $qrCodeUrl = "http://localhost:8050/Food/client_side/table_page.php?table_number=$tableNumber";
             $qrCode = new QrCode($qrCodeUrl);
 
             $writer = new PngWriter();
