@@ -1,7 +1,6 @@
 <?php 
 include "../connectdb.php";
-
-session_start(); 
+include "session.php";
 $tableNumber = isset($_SESSION['table_number']) ? $_SESSION['table_number'] : null;
 
 if ($tableNumber === null) {
@@ -77,29 +76,89 @@ if ($tableNumber === null) {
                 document.getElementById('dishPopup').style.display = "none";
             }
 
-            // Add to cart function lmao
+            /////////////////////////////////////////////// CART ITEM /////////////////////////////////////////////////////////
+
+            let cart = []; // Array to store cart items
+
+            function openCart() {
+                const cartPopup = document.getElementById("cartPopup");
+                const cartItemsContainer = document.getElementById("cartItems");
+                const cartTotal = document.getElementById("cartTotal");
+
+                // Clear the current cart display
+                cartItemsContainer.innerHTML = "";
+
+                // If the cart is empty, display a message
+                if (cart.length === 0) {
+                    cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
+                    cartTotal.textContent = "RM0.00";
+                } else {
+                    // Otherwise, display the cart items
+                    let total = 0;
+
+                    cart.forEach((item, index) => {
+                        total += item.price * item.quantity;
+
+                        const cartItem = document.createElement("div");
+                        cartItem.className = "cart-item";
+                        cartItem.innerHTML = `
+                            <span>${item.name} x ${item.quantity}</span>
+                            <span>RM${(item.price * item.quantity).toFixed(2)}</span>
+                            <button onclick="removeFromCart(${index})">Remove</button>
+                        `;
+                        cartItemsContainer.appendChild(cartItem);
+                    });
+
+                    // Update the total
+                    cartTotal.textContent = `RM${total.toFixed(2)}`;
+                }
+
+                // Display the popup
+                cartPopup.style.display = "block";
+            }
+
+            function closeCart() {
+                document.getElementById("cartPopup").style.display = "none";
+            }
+
             function addToCart() {
-                // Get dish details
-                const dishName = document.getElementById('popupDishName').textContent;
-                const dishDesc = document.getElementById('popupDishDesc').textContent;
-                const dishPrice = document.getElementById('popupDishPrice').textContent.replace('RM', '');
-                const dishImage = document.getElementById('popupDishImage').src;
+                // Get the item details from the popup
+                const dishName = document.getElementById("popupDishName").textContent;
+                const dishPrice = parseFloat(document.getElementById("popupDishPrice").textContent.replace("RM", ""));
 
-                console.log(dishName, dishDesc, dishPrice, dishImage);
+                // Check if the item is already in the cart
+                const existingItem = cart.find(item => item.name === dishName);
 
-                // Send data to the server using AJAX
-                const xhr = new XMLHttpRequest();
-                xhr.open("POST", "add_to_cart.php", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                if (existingItem) {
+                    // If the item is already in the cart, increase its quantity
+                    existingItem.quantity += 1;
+                } else {
+                    // Otherwise, add the new item to the cart
+                    cart.push({ name: dishName, price: dishPrice, quantity: 1 });
+                }
 
-                xhr.onload = function() {
-                    if (xhr.status === 200) {
-                        alert("Item added to cart!");
-                    }
-                };
+                alert(`${dishName} has been added to your cart.`);
+                closePopup(); // Close the dish popup
+            }
 
-                // Send the dish details as parameters to the server
-                xhr.send("dishName=" + encodeURIComponent(dishName) + "&dishDesc=" + encodeURIComponent(dishDesc) + "&dishPrice=" + encodeURIComponent(dishPrice) + "&dishImage=" + encodeURIComponent(dishImage));
+            function removeFromCart(index) {
+                // Remove the item at the specified index
+                cart.splice(index, 1);
+
+                // Refresh the cart display
+                openCart();
+            }
+
+            function checkout() {
+                if (cart.length === 0) {
+                    alert("Your cart is empty. Add some items before checking out.");
+                    return;
+                }
+
+                // You can handle checkout logic here (e.g., send the cart data to the server)
+                alert("Thank you for your order!");
+                cart = []; // Clear the cart
+                closeCart(); // Close the cart popup
             }
 
         </script>
@@ -117,8 +176,8 @@ if ($tableNumber === null) {
                 </div>
 
                 <div class="shopping-cart">
-                    <button class="cart-button">
-                        <a href="shopping_cart.php"><img src="../images/icon-library/cart-48.png"></a>
+                    <button class="cart-button" onclick="openCart()">
+                        <img src="../images/icon-library/cart-48.png">
                     </button>
                 </div>
             </div>
@@ -153,6 +212,22 @@ if ($tableNumber === null) {
         <div class="display-menu" id="displayMenu">            
 
         </div>
+
+        <!-- Cart Popup -->
+        <div id="cartPopup" class="cart-popup-modal">
+            <div class="cart-popup-content">
+                <span class="close" onclick="closeCart()">&times;</span>
+                <h2>Your Cart</h2>
+                <div id="cartItems">
+                    <!-- Items will be displayed here dynamically -->
+                </div>
+                <div class="cart-total">
+                    <h3>Total: <span id="cartTotal">RM0.00</span></h3>
+                </div>
+                <button class="checkout-button" onclick="checkout()">Checkout</button>
+            </div>
+        </div>
+
 
         <script src="cart.js"></script>
 

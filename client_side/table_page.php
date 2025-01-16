@@ -1,5 +1,5 @@
 <?php
-session_start();
+include "session.php"; // Include session management
 
 // Reset session if requested
 if (isset($_GET['reset_session'])) {
@@ -19,9 +19,15 @@ if (isset($_POST['table_number'])) {
 include "../connectdb.php";
 $sql = "SELECT table_number FROM tablelist";
 $result = $conn->query($sql);
-$tableNumbers = [];
-while ($row = $result->fetch_assoc()) {
-    $tableNumbers[] = $row['table_number'];
+
+if ($result) {
+    $tableNumbers = [];
+    while ($row = $result->fetch_assoc()) {
+        $tableNumbers[] = $row['table_number'];
+    }
+} else {
+    echo "Error fetching table numbers.";
+    exit();
 }
 ?>
 

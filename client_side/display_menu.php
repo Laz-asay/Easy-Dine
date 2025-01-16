@@ -1,5 +1,10 @@
 <?php
-session_start();
+include "session.php";
+
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
 include "../connectdb.php";
 
 if (isset($_GET['q'])) {
@@ -42,7 +47,7 @@ $conn->close();
 
 <!-- POP POP POP UP  -->
 <div id="dishPopup" class="popup-modal">
-    <div class="popup-content">
+    <div class="popup-content"> 
         <span class="close" onclick="closePopup()">&times;</span>
         <img id="popupDishImage" src="" alt="Dish Image" class="popup-dish-image">
         <h2 id="popupDishName"></h2>
@@ -50,6 +55,6 @@ $conn->close();
         <p id="popupDishPrice"></p>
         <button class="add-to-cart" onclick="addToCart()">
             <img src="../images/icon-library/plus-60.png">
-        </button>
+        </button>   
     </div>
 </div>
