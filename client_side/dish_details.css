@@ -1,0 +1,86 @@
+body {
+    font-family: 'Mona Sans', sans-serif;
+    background-color: white;
+    color: black;
+    padding: 0;
+    margin: 0;
+    letter-spacing: 0.09px;
+    font-stretch: ultra-expanded;
+    overflow-x: hidden;
+}
+
+/* Animation for page transition */
+.page-container {
+    transform: translateX(100%);
+    animation: slideIn 0.6s forwards;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+.dish-details {
+    width: 100%;
+    top: 0;
+    text-align: center;
+}
+
+.dish-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.dish-table {
+    margin: 0 auto;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.dish-table td {
+    padding: 8px;
+}
+
+.quantity-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.quantity-selector button {
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+.quantity-input {
+    width: 50px;
+    text-align: center;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+}
+
+.action-butang button {
+    padding: 15px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    background-color: #944E63;
+    border-color: #944E63;
+    width: 90%;
+}
+
+
+

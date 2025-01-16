@@ -1,11 +1,13 @@
 <?php
 include "session.php";
 
-header('Content-Type: application/json');
+// Initialize cart session if not set
+if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
 
-$cart = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
-
+// Return the cart items as JSON
 echo json_encode([
-    'items' => $cart
+    'items' => $_SESSION['cart']
 ]);
 ?>

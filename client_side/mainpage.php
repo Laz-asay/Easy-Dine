@@ -59,24 +59,6 @@ if ($tableNumber === null) {
             });
 
             //popup in display_menu.php cause i hate myself enough to do this
-            function openPopup(dishName, dishDesc, dishPrice, dishImage) {
-                var popup = document.getElementById('dishPopup');
-                
-                // Set the content of the popup
-                document.getElementById('popupDishName').textContent = dishName;
-                document.getElementById('popupDishDesc').textContent = dishDesc;
-                document.getElementById('popupDishPrice').textContent = 'RM' + dishPrice;
-                document.getElementById('popupDishImage').src = dishImage;
-
-                // Show the popup and apply the fade-in effect
-                popup.style.display = "block";
-                popup.classList.add('fade-in');
-                
-                // Remove the fade-in class after the animation is complete
-                setTimeout(function() {
-                    popup.classList.remove('fade-in');
-                }, 500); // Match the animation duration
-            }
 
 
             window.onclick = function(event) {
@@ -98,145 +80,9 @@ if ($tableNumber === null) {
                 }, 500); // Timeout duration should match the animation duration (500ms)
             }
 
-
-            /////////////////////////////////////////////// CART ITEM /////////////////////////////////////////////////////////
-
-            function addToCart() {
-                // Get the item details from the popup
-                const dishName = document.getElementById("popupDishName").textContent;
-                const dishPrice = parseFloat(document.getElementById("popupDishPrice").textContent.replace("RM", ""));
-
-                // Send AJAX request to add item to cart in PHP session
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        // Update the cart display on success
-                        const totalQuantity = parseInt(this.responseText);
-                        updateCartQuantity(totalQuantity);
-                    }
-                };
-                xhttp.open("GET", "add_to_cart.php?dishName=" + encodeURIComponent(dishName) + "&dishPrice=" + encodeURIComponent(dishPrice), true);
-                xhttp.send();
-            }
-
-
-            function openCart() {
-                const cartPopup = document.getElementById("cartPopup");
-                const cartItemsContainer = document.getElementById("cartItems");
-                const cartTotal = document.getElementById("cartTotal");
-
-                // Send AJAX request to get cart items from the PHP session
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        const response = JSON.parse(this.responseText);
-                        cartItemsContainer.innerHTML = "";
-                        
-                        if (response.items.length === 0) {
-                            cartItemsContainer.innerHTML = "<p>Your cart is empty.</p>";
-                            cartTotal.textContent = "RM0.00";
-                        } else {
-                            let total = 0;
-                            response.items.forEach((item) => {
-                                total += item.price * item.quantity;
-                                const cartItem = document.createElement("div");
-                                cartItem.className = "cart-item";
-                                cartItem.innerHTML = `
-                                    <span>${item.name} x ${item.quantity}</span>
-                                    <span>RM${(item.price * item.quantity).toFixed(2)}</span>
-                                    <button onclick="removeFromCart('${item.name}')">Remove</button>
-                                `;
-                                cartItemsContainer.appendChild(cartItem);
-                            });
-
-                            cartTotal.textContent = `RM${total.toFixed(2)}`;
-                        }
-                    }
-                };
-                xhttp.open("GET", "get_cart.php", true);
-                xhttp.send();
-
-                // Display the popup
-                cartPopup.style.display = "block";
-            }
-
-            function closeCart() {
-                document.getElementById("cartPopup").style.display = "none";
-            }
-
-            function updateCartQuantity(quantity) {
-                const cartBadge = document.getElementById('cartQuantity');
-
-                if (quantity > 0) {
-                    cartBadge.textContent = quantity; // Set the quantity
-                    cartBadge.style.display = "flex"; // Make sure it's visible
-                } else {
-                    cartBadge.style.display = "none"; // Hide the badge if the cart is empty
-                }
-            }
-
-            document.addEventListener("DOMContentLoaded", function () {
-                const cart = JSON.parse(sessionStorage.cart || "[]");
-                updateCartQuantity(cart.length);
-            });
-
-            function removeFromCart(dishName) {
-                // Send AJAX request to remove item from cart in PHP session
-                var xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        const totalQuantity = parseInt(this.responseText);
-                        updateCartQuantity(totalQuantity);
-                        openCart(); // Refresh cart display
-                    }
-                };
-                xhttp.open("GET", "remove_from_cart.php?dishName=" + encodeURIComponent(dishName), true);
-                xhttp.send();
-            }
-
-
-            function checkout() {
-                if (cart.length === 0) {
-                    alert("Your cart is empty. Add some items before checking out.");
-                    return;
-                }
-
-                // You can handle checkout logic here (e.g., send the cart data to the server)
-                alert("Thank you for your order!");
-                cart = []; // Clear the cart
-                closeCart(); // Close the cart popup
-            }
-
-            // Function to show a notification at the bottom of the page
-            function showNotification(dishName) {
-                // Create a div for the notification
-                const notification = document.createElement('div');
-                notification.classList.add('notification');
-                notification.textContent = `${dishName} has been added to your cart.`;
-
-                // Append the notification to the body
-                document.body.appendChild(notification);
-
-                // Trigger the animation by adding the 'show' class
-                setTimeout(() => {
-                    notification.classList.add('show');
-                }, 10); // Slight delay to allow animation to trigger
-
-                // Remove the notification after 3 seconds
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                    // Remove the notification from the DOM after it fades out
-                    setTimeout(() => {
-                        notification.remove();
-                    }, 500); // Wait for fade-out to complete before removing
-                }, 3000); // 3 seconds for the notification to stay visible
-            }
-
-
         </script>
-
-
     </head>
+
     <body>
         <div class="head-menu">
             <!-- TABLE AND CART -->
@@ -248,9 +94,10 @@ if ($tableNumber === null) {
                 </div>
 
                 <div class="shopping-cart">
-                    <button class="cart-button" onclick="openCart()">
-                        <img src="../images/icon-library/cart-48.png">
-                        <span id="cartQuantity" class="cart-badge">0</span>
+                    <button class="cart-button">
+                        <a href="shopping_cart.php">
+                            <img src="../images/icon-library/cart-48.png">
+                        </a>
                     </button>
                 </div>
             </div>
@@ -286,22 +133,7 @@ if ($tableNumber === null) {
 
         </div>
 
-        <!-- Cart Popup -->
-        <div id="cartPopup" class="cart-popup-modal">
-            <div class="cart-popup-content">
-                <button class="close" onclick="closeCart()">
-                    <i class="fa-solid fa-circle-xmark"></i>
-                </button>
-                <h2>Your Cart</h2>
-                <div id="cartItems">
-                    <!-- Items will be displayed here dynamically -->
-                </div>
-                <div class="cart-total">
-                    <h3>Total: <span id="cartTotal">RM0.00</span></h3>
-                </div>
-                <button class="checkout-button" onclick="checkout()">Checkout</button>
-            </div>
-        </div>
+
 
 
         <script src="cart.js"></script>

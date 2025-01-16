@@ -1,23 +1,24 @@
 <?php
-include "session.php";
+session_start();
 
-if (isset($_GET['dishName'])) {
-    $dishName = $_GET['dishName'];
+$dishName = isset($_GET['dishName']) ? $_GET['dishName'] : '';
 
-    // Find and remove the item from the cart
-    foreach ($_SESSION['cart'] as $key => $item) {
+if (isset($_SESSION['cart'])) {
+    foreach ($_SESSION['cart'] as $index => $item) {
         if ($item['name'] === $dishName) {
-            unset($_SESSION['cart'][$key]);
+            unset($_SESSION['cart'][$index]);
             break;
         }
     }
 
-    // Reindex the array to fix array gaps
+    // Re-index the array
     $_SESSION['cart'] = array_values($_SESSION['cart']);
-
-    // Return the total quantity of items in the cart
-    echo count($_SESSION['cart']);
-} else {
-    echo 0; // If no dishName is passed, return 0
 }
+
+// Calculate the total quantity of items in the cart
+$totalQuantity = array_reduce($_SESSION['cart'], function ($carry, $item) {
+    return $carry + $item['quantity'];
+}, 0);
+
+echo $totalQuantity;
 ?>

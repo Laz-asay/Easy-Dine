@@ -1,10 +1,5 @@
 <?php
 include "session.php";
-
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
-
 include "../connectdb.php";
 
 if (isset($_GET['q'])) {
@@ -21,41 +16,31 @@ if (isset($_GET['q'])) {
             $dishName = htmlspecialchars($row['dish_name']);
             $dishImage = "../images/mainmenu/" . $row['dish_image'];
             $dishPrice = htmlspecialchars($row['dish_price']);
-            $dishDesc = htmlspecialchars($row['dish_desc']);
-            echo '  
-                    <div class="menu-box" onclick="openPopup(\'' . $dishName . '\', \'' . $dishDesc . '\', \'' . $dishPrice . '\', \'' . $dishImage . '\')">
-                        <div class="img-and-name">
-                            <img src="' . $dishImage . '" alt="' . $dishName . '" class="dish-image">
-                            <div class="name-and-price">
-                                <h2 class="dish-name">' . $dishName . '</h2>
-                                <p class="dish-price">RM' . $dishPrice . '</p>
+
+            echo '
+                <div class="menu-box">
+                    <form action="dish_details.php" method="GET">
+                        <input type="hidden" name="name" value="' . $dishName . '">
+                        <button type="submit" class="menu-box-btn">
+                            <div class="img-and-name">
+                                <img src="' . $dishImage . '" alt="' . $dishName . '" class="dish-image">
+                                <div class="name-and-price">
+                                    <h2 class="dish-name">' . $dishName . '</h2>
+                                    <p class="dish-price">RM' . $dishPrice . '</p>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                  ';
+                        </button>
+                    </form>
+                </div>
+            ';
         }
-        echo '</div>';
     } else {
         echo "<p>No available dishes in this category.</p>";
     }
 
+    echo '</div>';
     $stmt->close();
 }
 
 $conn->close();
 ?>
-
-<!-- POP POP POP UP  -->
-<div id="dishPopup" class="popup-modal">
-    <div class="popup-content"> 
-        <span class="close" onclick="closePopup()">&times;</span>
-        <img id="popupDishImage" src="" alt="Dish Image" class="popup-dish-image">
-        <h2 id="popupDishName"></h2>
-        <p id="popupDishDesc"></p>
-        <p id="popupDishPrice"></p>
-        <div class="action-buttons">
-            <button class="add-to-cart" onclick="addToCart()">Add To Cart</button>   
-            <button class="add-to-cart" onclick="closePopup()">Close</button>
-        </div>
-    </div>
-</div>
