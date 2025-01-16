@@ -1,6 +1,7 @@
 <?php 
 include "../connectdb.php";
 include "session.php";
+$totalQuantity = isset($_SESSION['total_quantity']) ? $_SESSION['total_quantity'] : 0;
 $tableNumber = isset($_SESSION['table_number']) ? $_SESSION['table_number'] : null;
 
 if ($tableNumber === null) {
@@ -35,20 +36,54 @@ if ($tableNumber === null) {
                 // Add the active class to the clicked button
                 buttonElement.classList.add("active");
 
-                // Load the category's food menu via AJAX
-                if (categoryName === "") {
-                    document.getElementById("displayMenu").innerHTML = "";
-                    return;
-                }
-                xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        document.getElementById("displayMenu").innerHTML = this.responseText;
+                // Get the display menu element
+                var displayMenu = document.getElementById("displayMenu");
+
+                // Add fade-out animation to the current content
+                displayMenu.classList.add("fade-out");
+
+                // Wait for the fade-out animation to complete before fetching and updating content
+                displayMenu.addEventListener(
+                    "animationend",
+                    function handleFadeOut() {
+                        // Remove fade-out class after animation
+                        displayMenu.classList.remove("fade-out");
+
+                        // Load the category's food menu via AJAX
+                        if (categoryName === "") {
+                            displayMenu.innerHTML = "";
+                            displayMenu.classList.add("fade-in"); // Trigger fade-in animation
+                            return;
+                        }
+
+                        xhttp = new XMLHttpRequest();
+                        xhttp.onreadystatechange = function () {
+                            if (this.readyState == 4 && this.status == 200) {
+                                // Update the content
+                                displayMenu.innerHTML = this.responseText;
+
+                                // Add fade-in animation to new content
+                                displayMenu.classList.add("fade-in");
+
+                                // Remove fade-in class after animation
+                                displayMenu.addEventListener(
+                                    "animationend",
+                                    function handleFadeIn() {
+                                        displayMenu.classList.remove("fade-in");
+                                        displayMenu.removeEventListener("animationend", handleFadeIn);
+                                    }
+                                );
+                            }
+                        };
+                        xhttp.open("GET", "display_menu.php?q=" + encodeURIComponent(categoryName), true);
+                        xhttp.send();
+
+                        // Remove the event listener to avoid multiple triggers
+                        displayMenu.removeEventListener("animationend", handleFadeOut);
                     }
-                };
-                xhttp.open("GET", "display_menu.php?q=" + encodeURIComponent(categoryName), true);
-                xhttp.send();
+                );
             }
+
 
             // Automatically load the first category when the page loads
             document.addEventListener("DOMContentLoaded", function() {
@@ -80,6 +115,27 @@ if ($tableNumber === null) {
                 }, 500); // Timeout duration should match the animation duration (500ms)
             }
 
+            setInterval(() => {
+                fetch('get_cart_quantity.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        const cartBadge = document.querySelector('.cart-badge');
+                        if (data.total_quantity > 0) {
+                            if (!cartBadge) {
+                                const badge = document.createElement('span');
+                                badge.className = 'cart-badge';
+                                badge.textContent = data.total_quantity;
+                                document.querySelector('.cart-button').appendChild(badge);
+                            } else {
+                                cartBadge.textContent = data.total_quantity;
+                            }
+                        } else if (cartBadge) {
+                            cartBadge.remove();
+                        }
+                    });
+            }, 5000);
+
+
         </script>
     </head>
 
@@ -97,6 +153,9 @@ if ($tableNumber === null) {
                     <button class="cart-button">
                         <a href="shopping_cart.php">
                             <img src="../images/icon-library/cart-48.png">
+                            <?php if ($totalQuantity > 0): ?>
+                                <span class="cart-badge"><?php echo $totalQuantity; ?></span>
+                            <?php endif; ?>
                         </a>
                     </button>
                 </div>
@@ -104,27 +163,30 @@ if ($tableNumber === null) {
             <!-- END OF TABLE AND CART -->
 
 
-            <?php 
-                $sql = "SELECT * FROM food_category ORDER BY Category_ID ASC"; // Order by category_name
-                $result = $conn->query($sql);
+            <div class="category-content-wrapper">
+                <div class="fade-in" id="category-content">
+                    <?php 
+                        $sql = "SELECT * FROM food_category ORDER BY Category_ID ASC"; // Order by category_name
+                        $result = $conn->query($sql);
 
-                if ($result->num_rows > 0) {
-                    echo '<div class="card-container">';
-                    $firstCategory = true; 
-                    while ($row = $result->fetch_assoc()) {
-                        $categoryName = htmlspecialchars($row['category_name']); 
-                        $activeClass = $firstCategory ? 'active' : ''; 
-                        echo '<div class="card">
-                                <button class="' . $activeClass . '" onclick="loadCategory(\'' . $categoryName . '\', this)">' . $categoryName . '</button>
-                            </div>';
-                        $firstCategory = false; 
-                    }
-                    echo '</div>';
-                } else {
-                    echo "<p>No categories found</p>";
-                }
-            ?>
-
+                        if ($result->num_rows > 0) {
+                            echo '<div class="card-container">';
+                            $firstCategory = true; 
+                            while ($row = $result->fetch_assoc()) {
+                                $categoryName = htmlspecialchars($row['category_name']); 
+                                $activeClass = $firstCategory ? 'active' : ''; 
+                                echo '<div class="card">
+                                        <button class="' . $activeClass . '" onclick="loadCategory(\'' . $categoryName . '\', this)">' . $categoryName . '</button>
+                                    </div>';
+                                $firstCategory = false; 
+                            }
+                            echo '</div>';
+                        } else {
+                            echo "<p>No categories found</p>";
+                        }
+                    ?>
+                </div>
+            </div>
 
 
         </div>

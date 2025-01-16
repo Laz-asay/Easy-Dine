@@ -46,24 +46,19 @@ $conn->close();
 </head>
 <body>
     <div class="page-container">
-        <div class="dish-details">
-
-
-
+        <div class="dish-details">  
             <img src="<?php echo $dishImage; ?>" alt="<?php echo htmlspecialchars($dishName); ?>" class="dish-image">
 
-            <h1><?php echo htmlspecialchars($dishName); ?></h1>
+            <div class="dish-and-price">
+                <div class="dish-name">
+                    <h2><?php echo htmlspecialchars($dishName); ?></h2>
+                </div>
+                <h2>RM<?php echo $dishPrice; ?></h2>
+            </div>
 
-            <table class="dish-table">
-                <tr>
-                    <td><strong>Price:</strong></td>
-                    <td>RM<?php echo $dishPrice; ?></td>
-                </tr>
-                <tr>
-                    <td><strong>Description:</strong></td>
-                    <td><?php echo $dishDesc; ?></td>
-                </tr>
-            </table>
+            <div class="dish-desc">
+                <p><?php echo $dishDesc; ?></p>
+            </div>
 
             <div class="bottom-fixed">
                 <!-- Quantity Selector -->
@@ -88,9 +83,6 @@ $conn->close();
                     </a>
                 </div>
             </div>
-
-
-
         </div>
     </div>
 

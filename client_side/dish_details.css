@@ -7,12 +7,14 @@ body {
     letter-spacing: 0.09px;
     font-stretch: ultra-expanded;
     overflow-x: hidden;
+    height: 100%;
 }
 
 /* Animation for page transition */
 .page-container {
     transform: translateX(100%);
     animation: slideIn 0.6s forwards;
+    height: 100%;
 }
 
 @keyframes slideIn {
@@ -28,12 +30,14 @@ body {
     width: 100%;
     top: 0;
     text-align: center;
+    height: 100%;
+    
 }
 
 .dish-image {
     width: 100%;
     height: auto;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .dish-table {
@@ -46,6 +50,25 @@ body {
     padding: 8px;
 }
 
+.dish-and-price {
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 0;
+}
+
+.dish-name {
+    text-overflow: ellipsis;
+    text-wrap: wrap;
+}
+
+.dish-desc p{
+    color: #8f8f8f;
+}
+
+
 .quantity-selector {
     display: flex;
     justify-content: center;
@@ -55,13 +78,20 @@ body {
 }
 
 .quantity-selector button {
-    padding: 5px 10px;
-    font-size: 16px;
+    padding: 5px 13px;
+    font-weight: bold;
+    color: #944E63;
+    font-size: 25px;
+    background-color: transparent;
+    border: 1px solid black;
+    border-radius: 5px;
 }
 
 .quantity-input {
     width: 50px;
     text-align: center;
+    border: none;
+    font-size: 20pt;
 }
 
 .action-buttons {
@@ -69,12 +99,13 @@ body {
     flex-direction: column;
     justify-content: center;
     gap: 10px;
+    bottom: 0;
 }
 
 .action-butang button {
-    padding: 15px 20px;
-    border-radius: 20px;
-    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 12px;
+    font-size: 20px;
     cursor: pointer;
     color: white;
     background-color: #944E63;

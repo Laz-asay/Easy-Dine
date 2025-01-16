@@ -128,6 +128,32 @@ body {
     margin-top: 0;
 }
 
+.fade-in {
+    animation: fadeIn 0.1s ease-in-out forwards;
+}
+
+.fade-out {
+    animation: fadeOut 0.1s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
 .menu-box {
     margin-top: 0;
     padding: 0;
@@ -135,8 +161,15 @@ body {
     border-radius: 0.5em;
     height: 150px; /* Set a fixed height */
     overflow: hidden; /* Hide any overflow */
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Horizontally center content */
+    align-items: center;
 }
 
+.menu-box button {
+    background-color: transparent;
+    border: none;
+}
 
 .img-and-name {
     display: flex;
@@ -163,7 +196,7 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 90%;
-    padding: 0;
+    padding: 2px;
     position: absolute;    /* Position the name and price on top of the image */
     bottom: 0;         
     left: 0;

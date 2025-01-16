@@ -1,6 +1,7 @@
 <?php
 include "session.php";
 
+
 // Initialize the cart if not already set
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
@@ -25,6 +26,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_item'])) {
     header("Location: shopping_cart.php");
     exit;
 }
+
+$totalQuantity = 0; // Initialize total quantity
+
+// Calculate the total quantity of items in the cart
+foreach ($cart as $item) {
+    $totalQuantity += $item['quantity'];
+}
+
+$_SESSION['total_quantity'] = $totalQuantity; // Store total quantity in session
+
+
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_item'])) {
 </head>
 <body>
     <div class="cart-container">
-        <h1>Your Shopping Cart</h1>
+        <h1>Shopping Cart</h1>
+        <p class="swipe-info">(Swipe box to the left to remove)</p>
         <?php if (empty($cart)): ?>
             <p class="empty-cart">Your cart is empty. <a href="mainpage.php" class="back-to-menu">Go back to menu</a></p>
         <?php else: ?>
@@ -58,10 +71,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_item'])) {
                     <div class="remove-overlay">Swipe to Remove</div>
                 </div>
             <?php endforeach; ?>
-            
+
             <div class="cart-summary">
                 <p>Total: RM<?php echo number_format($total, 2); ?></p>
             </div>
+
 
             <a href="mainpage.php" class="back-to-menu">Continue Browsing</a>
             <form action="checkout.php" method="POST" style="display: inline;">
@@ -117,6 +131,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_item'])) {
                 }
             });
         });
+
+        const totalQuantity = <?php echo json_encode($totalQuantity); ?>;
+        fetch('update_cart_quantity.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ total_quantity: totalQuantity })
+        });
+
+
     </script>
 
 </body>
