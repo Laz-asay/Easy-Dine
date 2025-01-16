@@ -77,6 +77,31 @@ if ($tableNumber === null) {
                 document.getElementById('dishPopup').style.display = "none";
             }
 
+            // Add to cart function lmao
+            function addToCart() {
+                // Get dish details
+                const dishName = document.getElementById('popupDishName').textContent;
+                const dishDesc = document.getElementById('popupDishDesc').textContent;
+                const dishPrice = document.getElementById('popupDishPrice').textContent.replace('RM', '');
+                const dishImage = document.getElementById('popupDishImage').src;
+
+                console.log(dishName, dishDesc, dishPrice, dishImage);
+
+                // Send data to the server using AJAX
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "add_to_cart.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+                xhr.onload = function() {
+                    if (xhr.status === 200) {
+                        alert("Item added to cart!");
+                    }
+                };
+
+                // Send the dish details as parameters to the server
+                xhr.send("dishName=" + encodeURIComponent(dishName) + "&dishDesc=" + encodeURIComponent(dishDesc) + "&dishPrice=" + encodeURIComponent(dishPrice) + "&dishImage=" + encodeURIComponent(dishImage));
+            }
+
         </script>
 
 

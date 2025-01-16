@@ -48,6 +48,8 @@ $conn->close();
         <h2 id="popupDishName"></h2>
         <p id="popupDishDesc"></p>
         <p id="popupDishPrice"></p>
-        <button class="add-to-cart">Add to Cart</button>
+        <button class="add-to-cart" onclick="addToCart()">
+            <img src="../images/icon-library/plus-60.png">
+        </button>
     </div>
 </div>

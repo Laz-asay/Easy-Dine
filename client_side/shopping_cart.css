@@ -1,5 +1,5 @@
 body {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Mona Sans', sans-serif;
     background-color: white;
     color: black;
     padding: 0;
@@ -12,6 +12,8 @@ body {
 .top-fixed {
     position: fixed;
     width: 100%;
+    z-index: 1000; 
+    top: 0;
 }
 
 .top-menu {
@@ -54,15 +56,14 @@ body {
     }
 }
 
-.displayed-menu {
-    background-color: bisque;
-}
 
 /* BOTTOM PART (PRICE AND CHECKOUT) */
 .bottom-fixed {
     position: fixed;
     bottom: 1em;
     width: 100%;
+    z-index: 1000000;
+    background-color: white;
 }
 
 .jumlah-harga {
@@ -73,7 +74,6 @@ body {
     align-items: center;
     font-size: 1em;
 }
-
 
 .checkout-button {
     display: flex;
@@ -89,4 +89,92 @@ body {
     font-size: 1em;
     border-radius: 2em;
 }
+
+
+/********************* SHOPPING CART ************************/
+.empty-cart-message {
+    margin-left: 20px;
+    margin-top: 150px;
+}
+
+.empty-cart-message h2{
+    font-size: 10pt;
+}
+
+.cart-container {
+    margin-top: 150px; /* Adjust this value based on the height of your fixed header */
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+
+
+.cart-item {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    margin: 20px 0;
+    display: flex;
+    padding: 5px;
+    border-radius: 10px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out; /* For smooth swipe effect */
+}
+
+
+.dish-name-cart-display {
+    text-wrap: wrap;
+    max-width: 100px;
+    margin-right: 10px;
+    font-size: 15pt;
+    overflow: hidden;
+    max-height: 70px;
+    text-overflow: ellipsis;
+}
+
+.dish-price-cart-display {
+    text-wrap: wrap;
+    max-width: 100px;
+    margin-right: 10px;
+}
+
+.cart-item-image {
+    max-width: 85px;
+    max-height: 85px;
+    object-fit: cover;
+    margin-left: 5px;
+    margin-right: 5px;
+    align-items: stretch;
+    border-radius: 10px;
+}
+
+.cart-item.swiped-left {
+    transform: translateX(-100%); /* Swipe the cart item off screen */
+}
+
+.cart-item .trash-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    font-size: 24px;
+    color: #e74c3c;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.cart-item.swiped-left .trash-icon {
+    opacity: 1;
+}
+
+.cart-item.swiped-left .remove-btn {
+    display: none; /* Hide the remove button when swiped */
+}
+
 
