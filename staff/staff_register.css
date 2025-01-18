@@ -1,0 +1,81 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #efefef;
+    font-family: 'Mona Sans', sans-serif;
+    color: black;
+}
+
+.register-container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 300px; /* Slightly larger for register form */
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.register-details-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.register-input {
+    padding: 10px;
+    box-sizing: border-box; /* Ensures padding doesn't break the layout */
+    border-radius: 10px; /* Optional: Add rounded corners */
+    font-size: 16px; /* Optional: Adjust font size */
+    outline: none;
+    background-color: #e8e6e6;
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
+.register-input:focus {
+    border: 2px solid #5c313e;
+    outline: none;
+}
+
+.register-button {
+    padding: 10px;
+    border-radius: 20px;
+    background-color: #944E63;
+    border: none;
+    color: white;
+    font-size: 12pt;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+.login-option {
+    margin-top: 10px;
+}
+
+.login-link {
+    text-decoration: none;
+    color: #944E63;
+    font-weight: bold;
+}
