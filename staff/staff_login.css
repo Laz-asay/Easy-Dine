@@ -78,3 +78,46 @@ body, html {
     color: #944E63;
     font-weight: bold;
 }
+
+/*************************** LOGIN ERROR ******************************/
+.notification {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #944E63; /* Red background */
+    color: white;
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    z-index: 9999;
+    display: none;
+    animation: slideIn 0.5s ease-out;
+}
+
+/* Slide-in animation */
+@keyframes slideIn {
+    from {
+        top: -50px;
+        opacity: 0;
+    }
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
+/* Optional: Add a fade-out effect */
+.fade-out {
+    animation: fadeOut 2s forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        top: -50px;
+    }
+}
