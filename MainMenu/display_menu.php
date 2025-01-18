@@ -69,7 +69,7 @@
                                 <form action="delete_dish.php" method="POST" style="display:inline;">
                                     <input type="hidden" name="dish_name" value="<?php echo htmlspecialchars($dish_name); ?>">
                                     <button type="submit" class="delete-menu" 
-                                        onclick="return confirm('Are you sure you want to delete this dish?');"> 
+                                        onclick="return confirmDeletion();"> 
                                         <i class="fa fa-trash"></i> 
                                     </button>
                                 </form>

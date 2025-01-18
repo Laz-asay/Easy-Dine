@@ -1,10 +1,21 @@
+<?php 
+
+session_start();
+
+if (!isset($_SESSION['admin_username'])) {
+    // Redirect to the login page if not logged in
+    header("Location: ../staff_login.php");
+    exit();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="menu.css">
-    <link rel="stylesheet" href="../navigation.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
@@ -54,7 +65,7 @@
     <!----- SIDEBAR CAUSE INCLUDING ANOTHER PAGE IS FOR LOSERS ----->
     <div class="sidebar">
         <div class="sidebar-header">
-            <label class="admin-name">Admin</label>
+            <label class="admin-name"><?php echo $_SESSION['admin_username'] ?></label>
         </div>
 
         <hr>
@@ -87,19 +98,22 @@
         
         <hr>
             <!-- Toggle Buttons -->
-            <div class="category-editor-section">
-                <button type="button" class="category-edit" onclick="showPopup('edit-category-popup')">
-                    <i class="fa fa-edit"></i>Edit Category
-                </button>
+            <div class="category-edit-wrapper">
+                <div class="category-editor-section">
+                    <button type="button" class="category-edit" onclick="showPopup('edit-category-popup')">
+                        <i class="fa fa-edit"></i>Edit Category
+                    </button>
 
-                <button type="button" class="category-edit" onclick="showPopup('add-category-popup')">
-                    <i class="fa-solid fa-plus"></i>Add Category
-                </button>
+                    <button type="button" class="category-edit" onclick="showPopup('add-category-popup')">
+                        <i class="fa-solid fa-plus"></i>Add Category
+                    </button>
 
-                <button type="button" class="category-edit" onclick="showPopup('delete-category-popup')">
-                    <i class="fa fa-trash"></i>Delete Category
-                </button>
+                    <button type="button" class="category-edit" onclick="showPopup('delete-category-popup')">
+                        <i class="fa fa-trash"></i>Delete Category
+                    </button>
+                </div>
             </div>
+
 
             <!-- Popup Containers -->
 
@@ -155,6 +169,15 @@
             </div>
         
             <hr>
+
+            <div class="logout-container">
+                <div class="logout-function">
+                    <a href="../staff/staff_logout.php">
+                        <button class="logout"><i class="fa-solid fa-right-from-bracket"></i>Logout</button>
+                    </a>
+                </div>
+            </div>
+
 
 
 
@@ -298,8 +321,14 @@
                 fileName.textContent = this.files[0] ? this.files[0].name : "No file chosen";
             });
 
-
-
+            function confirmDeletion() {
+                var dishName = document.querySelector('input[name="dish_name"]').value;
+                if (confirm('Are you sure you want to delete this dish? Deleting this dish will also remove it from the cart.')) {
+                    return true;  // Proceed with form submission
+                }
+                return false;  // Prevent form submission if the user cancels
+            }
+            
         </script>
         <!---------------------- END OF ADD DISH FORM ------------------------->
 

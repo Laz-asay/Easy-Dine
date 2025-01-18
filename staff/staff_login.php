@@ -15,7 +15,7 @@ if (isset($_SESSION['error'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="staff_login.css">
+    <link rel="stylesheet" href="staff_login2.css">
     <link rel="stylesheet" href="../navigation.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,21 +24,19 @@ if (isset($_SESSION['error'])) {
 </head>
 <body>
 
-    <div class="login-container">
-        <div class="login-box">
-            <h2>Staff Login</h2>
-            <form action="login.php" method="POST" class="login-form">
-                <div class="login-details-container">
-                    <label for="staff_name">Staff Name</label>
-                    <input type="text" name="staff_name" required autofocus class="login-input">
+    <div class="login-box">
+        <h2>Staff Login</h2>
+        <form action="login.php" method="POST" class="login-form">
+            <div class="login-details-container">
+                <label for="staff_name">Staff Name</label>
+                <input type="text" name="staff_name" required autofocus class="login-input">
 
-                    <label for="password">Password</label>
-                    <input type="password" name="password" required class="login-input">
-                </div>
+                <label for="password">Password</label>
+                <input type="password" name="password" required class="login-input">
+            </div>
 
-                <button type="submit" class="login-button">Log In</button>
-            </form>
-        </div>
+            <button type="submit" class="login-button">Log In</button>
+        </form>
     </div>
 
     <!-- Notification HTML element -->
