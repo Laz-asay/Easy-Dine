@@ -223,7 +223,10 @@ if (!isset($_SESSION['admin_username'])) {
         <!----- POPUP BUTTON ---->
         <div class="popup-buttons-group">
             <button class="popup-buttons" onclick="openForm()">Add Dish</button>
-            <button class="popup-buttons" onclick="openTablePopup()">Table edit</button>
+            <button class="popup-buttons" onclick="openTablePopup()">Table Edit</button>
+            <a href="staff_management.php">
+                <button class="popup-buttons">Staff Management</button>
+            </a>
         </div>
 
 

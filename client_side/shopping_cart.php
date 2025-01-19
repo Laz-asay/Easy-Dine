@@ -76,7 +76,6 @@ $_SESSION['total_quantity'] = $totalQuantity; // Store total quantity in session
                 <p>Total: RM<?php echo number_format($total, 2); ?></p>
             </div>
 
-
             <a href="mainpage.php" class="back-to-menu">Continue Browsing</a>
             <form action="checkout.php" method="POST" style="display: inline;">
                 <button type="submit" class="checkout-btn">Checkout</button>

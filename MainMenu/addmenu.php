@@ -7,15 +7,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dish_desc = htmlspecialchars($_POST['dish_desc']);
     $dish_category = htmlspecialchars($_POST['dish_category']);
     $dish_availability = isset($_POST['dish_availability']) && $_POST['dish_availability'] === "true" ? 1 : 0; // Ensure boolean handling
-    $dish_image = $_FILES['dish_image'];
+    $dish_image = $_FILES['dish_image']; //receive image file
 
     if (isset($dish_image) && $dish_image['error'] == 0) {
-        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']; // only allow these types of file
         $fileType = $dish_image['type'];
         
         if (in_array($fileType, $allowedTypes)) {
-            $targetDir = "../images/mainmenu/";
-            $fileName = uniqid() . "_" . basename($dish_image['name']);
+            $targetDir = "../images/mainmenu/"; //target folder directory to store images
+            $fileName = uniqid() . "_" . basename($dish_image['name']); // store name of file here to link to database
             $targetFile = $targetDir . $fileName;
 
             if (move_uploaded_file($dish_image['tmp_name'], $targetFile)) {
