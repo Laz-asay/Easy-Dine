@@ -31,6 +31,8 @@ if ($result) {
     echo "Error fetching table numbers.";
     exit();
 }
+
+
 ?>
 
 <!DOCTYPE html>

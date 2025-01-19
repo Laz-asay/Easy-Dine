@@ -1,0 +1,80 @@
+.menu-table {
+    margin-top: 10px;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    table-layout: auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 10pt;
+}
+
+.menu-table th, .menu-table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.menu-table th {
+    width: 25%;
+    background-color: #0B1739 !important;
+}
+
+.menu-table td {
+    width: 25%;
+    word-wrap: break-word;
+}
+
+.menu-table tr:nth-child(odd) {
+    background-color: #0B1739 !important;
+}
+
+.menu-table tr:nth-child(even) {
+    background-color: #0A1330 !important;
+}
+
+.menu-table td img {
+    max-width: 150px;
+    height: auto;
+    object-fit: contain;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: row;
+}
+
+.edit-menu,
+.delete-menu {
+    font-size: 14px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.edit-menu {
+    background-color: transparent; /* Green background */
+}
+
+.edit-menu:hover{
+    background-color: transparent; /* Green background */
+}
+
+.edit-menu i {
+    color: #AEB9E1;
+}
+
+
+/* Delete Button Styling */
+.delete-menu {
+    background-color: transparent; /* Red background */
+}
+
+.delete-menu:hover {
+    background-color: transparent; /* Red background */
+}
+
+.delete-menu i{
+    color: #AEB9E1;
+}
+
+
