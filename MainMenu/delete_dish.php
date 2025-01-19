@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("s", $dish_name);
             if ($stmt->execute()) {
                 // Success message
-                echo "<script>alert('Dish deleted successfully from both menu and cart!');</script>";
+                echo "<script>alert('Dish deleted successfully from both menu and order list!');</script>";
                 header("Location: ../MainMenu/menu.php"); // Redirect to the menu page
                 exit();
             } else {

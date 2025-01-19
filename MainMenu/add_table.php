@@ -14,11 +14,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (filter_var($numberOfTables, FILTER_VALIDATE_INT) && $numberOfTables > 0) {
         echo "Number of Tables: $numberOfTables<br><br>";
 
+        // Find the current highest table_number in the database
+        $result = $conn->query("SELECT MAX(table_number) AS max_table_number FROM tablelist");
+        $row = $result->fetch_assoc();
+        $maxTableNumber = $row['max_table_number'] ?? 0; // Default to 0 if no tables exist
+
         // Prepare SQL statement to insert table and QR code information
-        $stmt = $conn->prepare("INSERT INTO tablelist (table_number, qr_code_url, qr_code_file) VALUES (?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO tablelist (table_number, qr_code) VALUES (?, ?)");
 
         for ($i = 1; $i <= $numberOfTables; $i++) {
-            $tableNumber = $i;
+            $tableNumber = $maxTableNumber + $i; // Increment from the current highest table number
 
             // Generate the URL for this table, pointing to start_session.php
             $qrCodeUrl = "http://localhost:8050/Food/client_side/start_session.php?table=$tableNumber";
@@ -33,13 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Save the QR code image to a file
             $writer->write($qrCode)->saveToFile($qrCodeFilePath);
 
-            // Save the table number, QR code URL, and file path into the database
-            $stmt->bind_param("iss", $tableNumber, $qrCodeUrl, $qrCodeFilePath);
+            // Save the table number and QR code URL into the database
+            $stmt->bind_param("is", $tableNumber, $qrCodeUrl);
             $stmt->execute();
-
-            // Display the generated QR code for verification
-            echo "<img src='../images/QR/table_{$tableNumber}.png' alt='QR Code for Table $tableNumber'><br>";
-            echo "Table $tableNumber QR Code URL: <a href='$qrCodeUrl' target='_blank'>$qrCodeUrl</a><br><br>";
         }
 
         $stmt->close();
@@ -55,4 +56,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Please enter a valid number of tables!";
     }
 }
-?>

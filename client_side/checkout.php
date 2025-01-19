@@ -30,35 +30,53 @@ if ($resultTable->num_rows === 0) {
 $tableID = $resultTable->fetch_assoc()['Table_ID'];
 $cart = $_SESSION['cart'];
 
-// Loop through cart and insert into the `cart` table
+// Calculate the total amount for the order
+$totalAmount = 0;
 foreach ($cart as $item) {
-    $dishName = $item['name'];
-    $quantity = $item['quantity'];
-    $price = $item['price'];
-
-    // Get Dish_ID from menu table
-    $stmtDish = $conn->prepare("SELECT Dish_ID FROM menu WHERE dish_name = ?");
-    $stmtDish->bind_param("s", $dishName);
-    $stmtDish->execute();
-    $resultDish = $stmtDish->get_result();
-
-    if ($resultDish->num_rows > 0) {
-        $dishID = $resultDish->fetch_assoc()['Dish_ID'];
-
-        // Insert into cart table
-        $stmtCart = $conn->prepare("INSERT INTO cart (quantity, price, Dish_ID, Table_ID) VALUES (?, ?, ?, ?)");
-        $stmtCart->bind_param("idii", $quantity, $price, $dishID, $tableID);
-        $stmtCart->execute();
-    } else {
-        echo "<p>Error: Dish not found. Please contact staff. <a href='mainpage.php'>Go back to menu</a></p>";
-        exit;
-    }
+    $totalAmount += $item['price'] * $item['quantity'];
 }
 
-// Clear the session cart after checkout
-$_SESSION['cart'] = [];
+// Insert the order into the `orderlist` table
+$orderDate = date("Y-m-d H:i:s");
+$orderStatus = "Pending"; // Default order status
 
-// Redirect to confirmation page
-header("Location: confirmation.php");
-exit;
+$stmtOrder = $conn->prepare("INSERT INTO orderlist (order_date, total_amount, order_status, price, Table_ID) VALUES (?, ?, ?, ?, ?)");
+$stmtOrder->bind_param("sdssi", $orderDate, $totalAmount, $orderStatus, $totalAmount, $tableID);
+
+if ($stmtOrder->execute()) {
+    // Order inserted successfully
+    $orderID = $stmtOrder->insert_id; // Get the Order_ID of the new order
+
+    // Optional: Insert additional details if needed
+    foreach ($cart as $item) {
+        $dishName = $item['name'];
+        $quantity = $item['quantity'];
+        $price = $item['price'];
+
+        // Get Dish_ID from the menu table
+        $stmtDish = $conn->prepare("SELECT Dish_ID FROM menu WHERE dish_name = ?");
+        $stmtDish->bind_param("s", $dishName);
+        $stmtDish->execute();
+        $resultDish = $stmtDish->get_result();
+
+        if ($resultDish->num_rows > 0) {
+            $dishID = $resultDish->fetch_assoc()['Dish_ID'];
+
+            // Optionally store additional data related to order details if required.
+        } else {
+            echo "<p>Error: Dish not found. Please contact staff. <a href='mainpage.php'>Go back to menu</a></p>";
+            exit;
+        }
+    }
+
+    // Clear the session cart after checkout
+    $_SESSION['cart'] = [];
+
+    // Redirect to confirmation page
+    header("Location: confirmation.php?order_id=$orderID");
+    exit;
+} else {
+    echo "<p>Error: Unable to place order. Please contact staff. <a href='mainpage.php'>Go back to menu</a></p>";
+    exit;
+}
 ?>

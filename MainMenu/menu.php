@@ -313,7 +313,7 @@ if (!isset($_SESSION['admin_username'])) {
 
             function confirmDeletion() {
                 var dishName = document.querySelector('input[name="dish_name"]').value;
-                if (confirm('Are you sure you want to delete this dish? Deleting this dish will also remove it from the cart.')) {
+                if (confirm('Are you sure you want to delete this dish? Deleting this dish will also remove it from the order list.')) {
                     return true;  // Proceed with form submission
                 }
                 return false;  // Prevent form submission if the user cancels

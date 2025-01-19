@@ -1,10 +1,12 @@
 <?php
 include "session.php"; // Include session management
 
-// Reset session if requested
+// Reset session for table_number only
 if (isset($_GET['reset_session'])) {
-    session_unset(); // Clears all session variables
-    session_destroy(); // Destroys the session
+    // Unset only the 'table_number' session variable
+    if (isset($_SESSION['table_number'])) {
+        unset($_SESSION['table_number']); // Clears only the table_number session variable
+    }
     header("Location: table_page.php"); // Redirects to refresh the page
     exit();
 }
@@ -59,7 +61,7 @@ if ($result) {
     <!-- Session Reset Button -->
     <br><br>
     <a href="table_page.php?reset_session=true">
-        <button>Reset Session</button>
+        <button>Reset Table Selection</button>
     </a>
 
 </body>
