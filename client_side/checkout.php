@@ -1,5 +1,5 @@
 <?php
-session_start();
+include "session.php"; // Declared session start here
 include "../connectdb.php";
 
 // Check if cart is empty
@@ -36,6 +36,7 @@ foreach ($cart as $item) {
     $totalAmount += $item['price'] * $item['quantity'];
 }
 
+date_default_timezone_set('Asia/Kuala Lumpur');
 // Insert the order into the `orderlist` table
 $orderDate = date("Y-m-d H:i:s");
 $orderStatus = "Pending"; // Default order status
@@ -46,6 +47,9 @@ $stmtOrder->bind_param("sdssi", $orderDate, $totalAmount, $orderStatus, $totalAm
 if ($stmtOrder->execute()) {
     // Order inserted successfully
     $orderID = $stmtOrder->insert_id; // Get the Order_ID of the new order
+
+    // Store the Order_ID in the session
+    $_SESSION['order_id'] = $orderID;
 
     // Optional: Insert additional details if needed
     foreach ($cart as $item) {
@@ -72,9 +76,13 @@ if ($stmtOrder->execute()) {
     // Clear the session cart after checkout
     $_SESSION['cart'] = [];
 
-    // Redirect to confirmation page
-    header("Location: confirmation.php?order_id=$orderID");
+    // Generate a form to POST order_id to confirmation.php
+    echo "<form id='confirmationForm' action='confirmation.php' method='POST'>
+            <input type='hidden' name='order_id' value='$orderID'>
+        </form>
+        <script>document.getElementById('confirmationForm').submit();</script>";
     exit;
+
 } else {
     echo "<p>Error: Unable to place order. Please contact staff. <a href='mainpage.php'>Go back to menu</a></p>";
     exit;

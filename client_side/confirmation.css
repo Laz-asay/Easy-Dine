@@ -6,4 +6,102 @@ body {
     margin: 0;
     letter-spacing: 0.09px;
     font-stretch: ultra-expanded;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.thank-you {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.order-details {
+
+    padding-bottom: 0;
+    margin-bottom: 0;
+    width: 93%;
+    right: 0;
+}
+
+.order-details p {
+    text-align: left;
+    margin-left: 20px;
+}
+
+.report-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.report-table-container {
+    display: flex;
+    justify-content: center;
+}
+
+.report-table {
+    top: 0;
+    width: 90%;
+    border: 2px solid #944E63;
+    border-radius: 10px;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow */
+    padding: 5px
+}
+
+.report-table th {
+    text-align: left;
+    padding-left: 5px;
+}
+
+.report-table td {
+    padding: 5px;
+    text-align: right;
+}
+
+.confirmation-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: fixed;
+    bottom: 20px; /* Distance from the bottom of the screen */
+    width: 100%;
+    padding: 10px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between buttons */
+    width: 80%;
+    align-items: center; /* Center the buttons horizontally */
+}
+
+.buttons button {
+    width: 100%; /* Match the container's width */
+    padding: 15px; /* Button height */
+    font-size: 16px; /* Readable text size */
+    border: none; /* Remove default border */
+    border-radius: 25px; /* Rounded corners */
+    background-color: #944E63; /* Button background color */
+    color: white; /* Button text color */
+    cursor: pointer; /* Pointer cursor on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.buttons button:hover {
+    background-color: #7a3e51; /* Darker shade on hover */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+}
+
+.buttons a {
+    text-decoration: none; /* Remove underline from links */
+    width: 100%;
+}
+
+.buttons a button {
+    display: block; /* Ensure buttons inside links behave like block elements */
 }
