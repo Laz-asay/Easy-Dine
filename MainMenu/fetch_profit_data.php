@@ -1,6 +1,7 @@
 <?php
 // fetch_profit_data.php
 
+session_start();
 include("../connectdb.php");
 
 $period = isset($_GET['period']) ? $_GET['period'] : 'day';

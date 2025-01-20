@@ -49,7 +49,9 @@ if ($orderID) {
 </head>
 <body>
 
-    <div class="thank-you">        <h1>Thank You!</h1></div>
+    <div class="thank-you"> 
+        <h1>Thank You!</h1>
+    </div>
 
     <?php date_default_timezone_set('Asia/Kuala Lumpur'); ?>
     <?php echo date("Y-m-d H:i:s"); ?>

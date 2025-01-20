@@ -70,13 +70,6 @@ if (isset($_POST['push_to_report'])) {
     }
 }
 
-// Fetch orders from the database, ordered by table_number (joining with tablelist)
-$sql = "SELECT o.Order_ID, o.order_date, o.total_amount, o.order_status, o.Table_ID, t.table_number 
-        FROM orderlist o 
-        JOIN tablelist t ON o.Table_ID = t.Table_ID
-        WHERE (o.order_status != 'Completed' OR o.order_date >= NOW() - INTERVAL 24 HOUR)
-        ORDER BY t.table_number ASC";
-$result = mysqli_query($conn, $sql);
 
 
 // Check if it's an AJAX request
@@ -164,73 +157,64 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
 </head>
 <body>
 
-    <h1>Welcome <?php echo $_SESSION['admin_username']; ?></h1>
+    <div class="welcome-container">
+        <div class="welcome-and-back">
+            <a href="menu.php">
+                <button class="logout"><i class="fa-solid fa-arrow-left"></i></button>
+            </a>
+            <h1>Welcome <?php echo $_SESSION['admin_username']; ?></h1>
+        </div>
+    </div>
 
-    <a href="menu.php">
-        <button class="logout"><i class="fa-solid fa-arrow-left"></i>Back To Main Page</button>
-    </a>
 
-    <h2>Orders List</h2>
+    <div class="header-container">
+        <div class="setting-container">
+            <div class="order-and-button">
+                <h2>Orders List</h2>
+                    <!-- Button to trigger report overlay -->
+                    <div class="butang-report">
+                        <button class="report-button-show" onclick="showReportPopup()">View Reports</button>
 
-    <table class="order-table" border="1">
-        <thead>
-            <tr>
-                <th>Order ID</th>
-                <th>Order Date</th>
-                <th>Total Amount</th>
-                <th>Order Status</th>
-                <th>Table Number</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            if (mysqli_num_rows($result) > 0) {
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "<tr>";
-                    echo "<td>" . $row['Order_ID'] . "</td>";
-                    echo "<td>" . $row['order_date'] . "</td>";
-                    echo "<td>" . $row['total_amount'] . "</td>";
-                    echo "<td>" . $row['order_status'] . "</td>";
-                    echo "<td>" . $row['table_number'] . "</td>";
-                    
-                    // Disable the form elements if the order is completed
-                    $disabled = ($row['order_status'] == 'Completed') ? 'disabled' : '';
-                    
-                    // Form to update order status
-                    echo "<td>
-                        <form method='POST' action='' onsubmit='return confirmStatusChange();'>
-                            <input type='hidden' name='order_id' value='" . $row['Order_ID'] . "'>
-                            <select name='order_status' $disabled>
-                                <option value='Pending' " . ($row['order_status'] == 'Pending' ? 'selected' : '') . ">Pending</option>
-                                <option value='Done' " . ($row['order_status'] == 'Done' ? 'selected' : '') . ">Done</option>
-                                <option value='Cancelled' " . ($row['order_status'] == 'Cancelled' ? 'selected' : '') . ">Cancelled</option>
-                            </select>
-                            <button type='submit' name='update_status' $disabled>Update</button>
-                        </form>
-                        <form method='POST' action='' onsubmit='return confirmPushToReport();'>
-                            <input type='hidden' name='order_id' value='" . $row['Order_ID'] . "'>
-                            <button type='submit' name='push_to_report' $disabled>Push to Report</button>
-                        </form>
-                    </td>";
-                    echo "</tr>";
-                }
-            } else {
-                echo "<tr><td colspan='6'>No orders found.</td></tr>";
-            }
-            ?>
-        </tbody>
-    </table>
+                    </div>
+            </div>
+        </div>
 
-    <!-- Button to trigger report overlay -->
-    <button onclick="showReportPopup()">View Reports</button>
+    </div>
+
+    <div class="table-container">
+        <div class="center-order-table">
+            <table class="order-table">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Total Amount</th>
+                        <th>Order Status</th>
+                        <th>Table Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Orders will be dynamically inserted here -->
+                </tbody>
+            </table>
+            
+            <div class="order-pagination">
+                <!-- Pagination links will be dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+
+
+
 
     <!-- Report Popup Overlay -->
     <div id="reportOverlay">
         <div id="reportPopup">
             <button class="closePopupBtn" onclick="closeReportPopup()">Close</button>
             <h2>Report Table</h2>
-            <table border="1">
+            <table class="report-table">
                 <thead>
                     <tr>
                         <th>Report ID</th>
@@ -254,7 +238,6 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
 
 
     <!-- Time Period Selector -->
-    <div>
     <label for="periodSelect">Select Period: </label>
     <select id="periodSelect" onchange="updateChart(this.value)">
         <option value="day">Day</option>
@@ -295,12 +278,21 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
                     y: {
                         title: {
                             display: true,
-                            text: 'Profit'
+                            text: 'Profit (RM)'
+                        },
+                        min: 0, // Set the minimum value for the y-axis to 0
+                        max: 10000, // Set the maximum value for the y-axis to 10,000
+                        ticks: {
+                            stepSize: 1000, // Adjust the step size between tick marks, e.g., every RM1,000
+                            callback: function(value, index, values) {
+                                return 'RM' + value; // Add 'RM' prefix to the tick values
+                            }
                         }
                     }
                 }
             }
         });
+
 
         // Fetch the profit data from the PHP script and update the chart
         function updateChart(period) {
@@ -354,8 +346,59 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
         // Initially load reports for the first page
         loadReports(1);
 
-    </script>
+        function loadOrders(page) {
+        fetch(`fetch_orders.php?ajax=1&page=${page}`)
+            .then(response => response.json())
+            .then(data => {
+                const orderTableBody = document.querySelector(".order-table tbody");
+                orderTableBody.innerHTML = ''; // Clear existing rows
 
+                // Populate the new rows
+                data.orders.forEach(order => {
+                    const row = document.createElement("tr");
+                    const disabled = order.order_status === 'Completed' ? 'disabled' : '';
+                    row.innerHTML = `
+                        <td>${order.Order_ID}</td>
+                        <td>${order.order_date}</td>
+                        <td>${order.total_amount}</td>
+                        <td>${order.order_status}</td>
+                        <td>${order.table_number}</td>
+                        <td>
+                            <form method="POST" action="" onsubmit="return confirmStatusChange();">
+                                <input type="hidden" name="order_id" value="${order.Order_ID}">
+                                <select name="order_status" class="order-status-select" ${disabled}>
+                                    <option value="Pending" ${order.order_status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option valued="Done" ${order.order_status === 'Done' ? 'selected' : ''}>Done</option>
+                                    <option value="Cancelled" ${order.order_status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                </select>
+                                <button type="submit" name="update_status" class="status-button" ${disabled}>Update</button>
+                            </form>
+                            <form method="POST" action="" onsubmit="return confirmPushToReport();">
+                                <input type="hidden" name="order_id" value="${order.Order_ID}">
+                                <button type="submit" name="push_to_report" class="status-button" ${disabled}>Push to Report</button>
+                            </form>
+                        </td>
+                    `;
+                    orderTableBody.appendChild(row);
+                });
+
+                // Update pagination
+                const pagination = document.querySelector(".order-pagination");
+                pagination.innerHTML = `
+                    <a href="javascript:void(0);" onclick="loadOrders(1)">First</a>
+                    <a href="javascript:void(0);" onclick="loadOrders(${Math.max(1, page - 1)})">Prev</a>
+                    <span>Page ${page} of ${data.total_pages}</span>
+                    <a href="javascript:void(0);" onclick="loadOrders(${Math.min(data.total_pages, page + 1)})">Next</a>
+                    <a href="javascript:void(0);" onclick="loadOrders(${data.total_pages})">Last</a>
+                `;
+            })
+            .catch(error => console.error('Error fetching orders:', error));
+    }
+
+    // Load orders for the first page on page load
+    loadOrders(1);
+
+    </script>
 
 
     
