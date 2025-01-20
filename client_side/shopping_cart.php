@@ -53,16 +53,23 @@ $_SESSION['total_quantity'] = $totalQuantity; // Store total quantity in session
 <body>
     <div class="cart-container">
         <h1>Shopping Cart</h1>
-        <p class="swipe-info">(Swipe box to the left to remove)</p>
+
         <?php if (empty($cart)): ?>
-            <p class="empty-cart">Your cart is empty. <a href="mainpage.php" class="back-to-menu">Go back to menu</a></p>
+            <div class="cart-empty">
+                <p class="empty-cart">Your cart is empty. </p>
+                <a href="mainpage.php" class="back-to-menu">Go back to menu</a>
+            </div>
         <?php else: ?>
+            <div class="swipe-remove">
+                <p class="swipe-info">(Swipe box to the left to remove)</p>
+            </div>
             <?php
+
             $total = 0;
             foreach ($cart as $item):
                 $subtotal = $item['price'] * $item['quantity'];
                 $total += $subtotal;
-            ?>
+            ?>  
                 <div class="cart-item" data-name="<?php echo htmlspecialchars($item['name']); ?>">
                     <div class="item-info">
                         <p><strong><?php echo htmlspecialchars($item['name']); ?></strong></p>
@@ -76,12 +83,25 @@ $_SESSION['total_quantity'] = $totalQuantity; // Store total quantity in session
                 <p>Total: RM<?php echo number_format($total, 2); ?></p>
             </div>
 
-            <a href="mainpage.php" class="back-to-menu">Continue Browsing</a>
-            <form action="checkout.php" method="POST" style="display: inline;">
-                <button type="submit" class="checkout-btn">Checkout</button>
-            </form>
+            <div class="cart-filled-options">
+                <div class="cart-buttons">
+                    <div class="cart-buttons-vertical">
+                        <a href="mainpage.php">
+                            <button class="checkout-btn">
+                                Continue Browsing   
+                            </button>
+                        </a>
+                        <form action="checkout.php" method="POST" style="display: inline;">
+                            <button type="submit" class="checkout-btn">Checkout</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         <?php endif; ?>
     </div>
+
+
+
 
     <form id="removeForm" action="shopping_cart.php" method="POST" style="display: none;">
         <input type="hidden" name="remove_item" id="removeItemInput">

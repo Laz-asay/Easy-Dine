@@ -17,6 +17,7 @@ body {
     z-index: 1000;
     top: 0;
     left: 0;
+    padding-top: 40px;
 }
 
 body {
@@ -125,7 +126,6 @@ body {
     gap: 0.3em; /* Adds space between the items */
     margin-left: 0.8em;
     margin-right: 0.8em;
-    margin-top: 0;
 }
 
 .fade-in {
@@ -246,7 +246,7 @@ body {
 
 
 .display-menu {
-    margin-top: 90px; /* Ensure this matches the height of your top-menu */
+    margin-top: 115px; /* Ensure this matches the height of your top-menu */
 }
 
 @media (max-width: 440px) {
