@@ -123,7 +123,7 @@ if (!isset($_SESSION['admin_username'])) {
                     <h3>Edit Category Name</h3>
                     <form method="post" action="../editcategory.php" class="category-form">
                         <label for="current_category">Select Category to Edit:</label>
-                        <select name="current_category" id="current_category" required>
+                        <select name="current_category" id="current_category" class="choose-category" required>
                             <option value="" disabled selected>Choose a category</option>
                             <?php foreach ($categories as $category): ?>
                                 <option value="<?php echo $category; ?>"><?php echo $category; ?></option>
@@ -131,7 +131,7 @@ if (!isset($_SESSION['admin_username'])) {
                         </select>
 
                         <label for="new_category_name">New Category Name:</label>
-                        <input type="text" name="new_category_name" id="new_category_name" placeholder="New Category Name" required>
+                        <input type="text" name="new_category_name" id="new_category_name" class="category-text-input" placeholder="New Category Name" required>
 
                         <button type="submit" class="edit-button"><i class="fa fa-edit"></i>Edit Category</button>
                     </form>
@@ -143,8 +143,8 @@ if (!isset($_SESSION['admin_username'])) {
                 <div class="popup-content" onclick="event.stopPropagation()">
                     <h3>Add New Category</h3>
                     <form method="post" action="../addcategory.php">
-                        <input type="text" name="category_name" placeholder="Category Name" required>
-                        <button type="submit" name="add">Add Category</button>
+                        <input type="text" name="category_name" placeholder="Category Name" class="category-text-input" required>
+                        <button type="submit" name="add" class="add-button">Add Category</button>
                     </form>
                 </div>
             </div>
@@ -155,7 +155,7 @@ if (!isset($_SESSION['admin_username'])) {
                     <h3>Delete Category</h3>
                     <form method="post" action="../deletecategory.php" class="category-form">
                         <label for="category_name">Select Category to Delete:</label>
-                        <select name="category_name" id="category_name" required>
+                        <select name="category_name" id="category_name" class="choose-category" required>
                             <option value="" disabled selected>Choose a category</option>
                             <?php foreach ($categories as $category): ?>
                                 <option value="<?php echo $category; ?>"><?php echo $category; ?></option>
@@ -189,7 +189,7 @@ if (!isset($_SESSION['admin_username'])) {
                 <!-- Add Tables -->
                 <div class="table-button">
                     <form action="add_table.php" method="POST" id="add-table-form">
-                        <label for="number_of_tables">Number of Tables</label>
+                        <label for="number_of_tables">Number of Tables to add</label>
                         <input type="number" id="number_of_tables" name="number_of_tables" min="1" required>
                         <button type="submit" class="table-edit" id="add-table">Add Tables</button>
                     </form> 
@@ -197,19 +197,27 @@ if (!isset($_SESSION['admin_username'])) {
 
                 <!-- Delete Tables -->
                 <div class="table-button">
-                    <h3>Delete Tables</h3>
+                    <h4>Delete Tables</h4>
                     <form method="POST" action="delete_table.php" onsubmit="return confirmDeletion()">
                         <label for="tables_to_delete">Select Tables to Delete:</label><br>
-                        <?php
-                        include "../connectdb.php";
-                        $result = $conn->query("SELECT table_number FROM tablelist");
+                        
+                        <div class="checkbox-container">
+                            <?php
+                            include "../connectdb.php";
+                            $result = $conn->query("SELECT table_number FROM tablelist");
 
-                        while ($row = $result->fetch_assoc()) {
-                            echo "<input type='checkbox' name='tables_to_delete[]' value='" . $row['table_number'] . "'> Table " . $row['table_number'] . "<br>";
-                        }
-                        ?>
+                            while ($row = $result->fetch_assoc()) {
+                                echo "<input type='checkbox' class='table-checkbox' name='tables_to_delete[]' value='" . $row['table_number'] . "'> Table " . $row['table_number'] . "<br>";
+                            }
+                            ?>
+                        </div>
+
                         <button type="submit" name="delete_tables">Delete Selected Tables</button>
-                        <button type="submit" name="delete_all" id="delete_all" onclick="return confirmAllDeletion()">Delete All Tables</button>
+                    </form>
+
+                    <!-- Separate Form for Delete All Tables -->
+                    <form method="POST" action="delete_table.php" onsubmit="return confirmAllDeletion()">
+                        <button type="submit" name="delete_all" id="delete_all">Delete All Tables</button>
                     </form>
                 </div>
 
@@ -244,16 +252,17 @@ if (!isset($_SESSION['admin_username'])) {
                     <div class="file-upload">
                         <div class="custom-file-input">
                             <label for="dish_image" class="file-label">Upload Dish Image</label>
-                            <input type="file" id="dish_image" name="dish_image" required>
+                            <input type="file" id="dish_image" name="dish_image" class="image-upload-button" required>
+                            <button type="button" class="custom-file-button">Choose File</button> <!-- Custom file button -->
                         </div>
-                        <span id="file-name">No file chosen</span> 
+                        <span id="file-name"></span> 
                     </div>
 
                     <input type="number" name="dish_price" id="dish_price" placeholder="Dish Price" step="0.01" min="0" required>
 
                     <textarea name="dish_desc" id="dish_desc" rows="4" cols="20" placeholder="Dish Description" required></textarea>
 
-                    <select name="dish_category" id="dish_category" required>
+                    <select name="dish_category" id="dish_category" class="dish-category-select" required>
                         <option value="" disabled selected>Choose a category</option>
                         <?php
                         $sql = "SELECT category_name FROM food_category"; 
@@ -316,11 +325,16 @@ if (!isset($_SESSION['admin_username'])) {
 
             function confirmDeletion() {
                 var dishName = document.querySelector('input[name="dish_name"]').value;
-                if (confirm('Are you sure you want to delete this dish? Deleting this dish will also remove it from the order list.')) {
+                if (confirm('Are you sure you want to delete this table? Deleting this table will also remove it from the order list.')) {
                     return true;  // Proceed with form submission
                 }
                 return false;  // Prevent form submission if the user cancels
             }
+
+            function confirmAllDeletion() {
+                return confirm("Are you sure you want to delete all tables and their orders?");
+            }
+
 
         </script>
         <!---------------------- END OF ADD DISH FORM ------------------------->

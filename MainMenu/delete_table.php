@@ -17,23 +17,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtSelect->close();
 
                 if ($tableID) {
-                    // Delete from orderlist based on the Table_ID
+                    // Check if the Table_ID exists in the orderlist or reports table
+                    $stmtCheckOrderlist = $conn->prepare("SELECT COUNT(*) FROM orderlist WHERE Table_ID = ?");
+                    $stmtCheckOrderlist->bind_param("i", $tableID);
+                    $stmtCheckOrderlist->execute();
+                    $stmtCheckOrderlist->bind_result($orderCount);
+                    $stmtCheckOrderlist->fetch();
+                    $stmtCheckOrderlist->close();
+
+                    $stmtCheckReports = $conn->prepare("SELECT COUNT(*) FROM reports WHERE Order_ID IN (SELECT Order_ID FROM orderlist WHERE Table_ID = ?)");
+                    $stmtCheckReports->bind_param("i", $tableID);
+                    $stmtCheckReports->execute();
+                    $stmtCheckReports->bind_result($reportCount);
+                    $stmtCheckReports->fetch();
+                    $stmtCheckReports->close();
+
+                    // If the table exists in either orderlist or reports, prevent deletion
+                    if ($orderCount > 0 || $reportCount > 0) {
+                        echo "<script>alert('Table {$tableNumberToDelete} cannot be deleted because it exists in the orderlist or reports table.'); window.location.href = 'menu.php';</script>";
+                        exit(); // Prevent further execution if the table cannot be deleted
+                    }
+
+                    // Proceed with deleting from orderlist, tablelist, and QR codes
                     $stmtDeleteOrders = $conn->prepare("DELETE FROM orderlist WHERE Table_ID = ?");
                     $stmtDeleteOrders->bind_param("i", $tableID);
                     $stmtDeleteOrders->execute();
                     $stmtDeleteOrders->close();
-                }
 
-                // Delete the table from tablelist
-                $stmtDeleteTable = $conn->prepare("DELETE FROM tablelist WHERE table_number = ?");
-                $stmtDeleteTable->bind_param("i", $tableNumberToDelete);
-                $stmtDeleteTable->execute();
-                $stmtDeleteTable->close();
+                    // Delete the table from tablelist
+                    $stmtDeleteTable = $conn->prepare("DELETE FROM tablelist WHERE table_number = ?");
+                    $stmtDeleteTable->bind_param("i", $tableNumberToDelete);
+                    $stmtDeleteTable->execute();
+                    $stmtDeleteTable->close();
 
-                // Delete the QR code file
-                $qrCodeFilePath = "../images/QR/table_{$tableNumberToDelete}.png";
-                if (file_exists($qrCodeFilePath)) {
-                    unlink($qrCodeFilePath); // Delete the QR code file
+                    // Delete the QR code file
+                    $qrCodeFilePath = "../images/QR/table_{$tableNumberToDelete}.png";
+                    if (file_exists($qrCodeFilePath)) {
+                        unlink($qrCodeFilePath); // Delete the QR code file
+                    }
                 }
             }
         }
