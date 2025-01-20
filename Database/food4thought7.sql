@@ -110,8 +110,7 @@ CREATE TABLE `orderlist` (
   `total_amount` decimal(10,2) NOT NULL,
   `order_status` varchar(255) NOT NULL,
   `price` decimal(10,2) NOT NULL,
-  `Table_ID` int(11) NOT NULL,
-  `Cart_ID` int(11) NOT NULL
+  `Table_ID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------

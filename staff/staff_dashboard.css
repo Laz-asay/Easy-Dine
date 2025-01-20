@@ -1,0 +1,57 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: #efefef;
+    font-family: 'Mona Sans', sans-serif;
+    color: black;
+}
+
+/* Report Popup  */
+        /* Styles for the overlay popup */
+        #reportOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #reportPopup {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            overflow-y: auto;
+        }
+
+        #reportPopup table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        #reportPopup th, #reportPopup td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .closePopupBtn {
+            background-color: red;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .closePopupBtn:hover {
+            background-color: darkred;
+        }

@@ -2,8 +2,8 @@
 session_start();
 
 // Ensure the staff is logged in
-if (!isset($_SESSION['staff_name'])) {
-    header("Location: /staff_login.php");
+if (!isset($_SESSION['admin_username'])) {
+    header("Location: ../staff/staff_login.php");
     exit();
 }
 
@@ -123,7 +123,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="staff_dashboard.css">
+    <link rel="stylesheet" href="order_dashboard.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -164,10 +164,10 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
 </head>
 <body>
 
-    <h1>Welcome <?php echo $_SESSION['staff_name']; ?></h1>
+    <h1>Welcome <?php echo $_SESSION['admin_username']; ?></h1>
 
-    <a href="staff_logout.php">
-        <button class="logout"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+    <a href="menu.php">
+        <button class="logout"><i class="fa-solid fa-arrow-left"></i>Back To Main Page</button>
     </a>
 
     <h2>Orders List</h2>

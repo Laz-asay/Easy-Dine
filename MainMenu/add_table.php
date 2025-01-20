@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $tableNumber = $maxTableNumber + $i; // Increment from the current highest table number
 
             // Generate the URL for this table, pointing to start_session.php
-            $qrCodeUrl = "http://localhost:8050/Food/client_side/start_session.php?table=$tableNumber";
+            $qrCodeUrl = "http://localhost/Food/client_side/start_session.php?table=$tableNumber";
 
             // Create the QR code using the URL
             $qrCode = new QrCode($qrCodeUrl);
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $writer->write($qrCode)->saveToFile($qrCodeFilePath);
 
             // Save the table number and QR code URL into the database
-            $stmt->bind_param("is", $tableNumber, $qrCodeUrl);
+            $stmt->bind_param("is", $tableNumber, $qrCodeFilePath);
             $stmt->execute();
         }
 

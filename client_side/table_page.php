@@ -32,6 +32,9 @@ if ($result) {
     exit();
 }
 
+$query = "SELECT table_number, qr_code FROM tablelist";
+$result = $conn->query($query);
+
 
 ?>
 
@@ -63,8 +66,16 @@ if ($result) {
     <!-- Session Reset Button -->
     <br><br>
     <a href="table_page.php?reset_session=true">
-        <button>Reset Table Selection</button>
+        <button>Reset Table Session</button>
     </a>
+    
+    <?php while ($row = $result->fetch_assoc()): ?>
+    <div class="qr-item">
+        <!-- Display the QR code image -->
+        <img src="<?php echo htmlspecialchars($row['qr_code']); ?>" alt="QR Code for Table <?php echo $row['table_number']; ?>">
+        <p>Table <?php echo $row['table_number']; ?></p>
+    </div>
+    <?php endwhile; ?>  
 
 </body>
 </html>

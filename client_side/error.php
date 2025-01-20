@@ -11,6 +11,6 @@ $errorMessage = isset($_GET['error']) ? htmlspecialchars($_GET['error']) : "Unkn
 <body>
     <h1>Error</h1>
     <p><?php echo $errorMessage; ?></p>
-    <a href="start_session.php">Click here to scan the QR code again.</a>
+    <a href="table_page.php">Enter Table page</a>
 </body>
 </html>

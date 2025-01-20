@@ -220,12 +220,15 @@ if (!isset($_SESSION['admin_username'])) {
         <div id="table-overlay" class="overlay" onclick="closeTablePopup()"></div>
 
                             
-        <!----- POPUP BUTTON ---->
+        <!----- MAIN CONTENT BUTTONS ---->
         <div class="popup-buttons-group">
             <button class="popup-buttons" onclick="openForm()">Add Dish</button>
             <button class="popup-buttons" onclick="openTablePopup()">Table Edit</button>
             <a href="staff_management.php">
                 <button class="popup-buttons">Staff Management</button>
+            </a>
+            <a href="order_dashboard.php">
+                <button class="popup-buttons">Order Dashboard</button>
             </a>
         </div>
 
