@@ -219,6 +219,13 @@ if (!isset($_SESSION['admin_username'])) {
                     <form method="POST" action="delete_table.php" onsubmit="return confirmAllDeletion()">
                         <button type="submit" name="delete_all" id="delete_all">Delete All Tables</button>
                     </form>
+
+                    <div class="view-tables">
+                        <a href="show_tables.php">
+                         <button class="view-tables-btn">View Tables</button>
+
+                        </a>
+                    </div>
                 </div>
 
             </div>
