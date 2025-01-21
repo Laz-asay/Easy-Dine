@@ -53,9 +53,6 @@ if ($orderID) {
         <h1>Thank You!</h1>
     </div>
 
-    <?php date_default_timezone_set('Asia/Kuala Lumpur'); ?>
-    <?php echo date("Y-m-d H:i:s"); ?>
-
     <div class="report-container">
         <?php if (!empty($order_data)): ?>
             <div class="order-details">

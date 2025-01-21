@@ -247,3 +247,41 @@ body {
     color: black;
     font-weight: bold;
 }
+
+.chart-selector {
+    text-align: center;
+    margin-bottom: 20px; /* Add space below the selector */
+}
+
+.select-time {
+    background-color: #081028;
+    color: #AEB9E1;
+    padding: 5px;
+    margin-left: 10px;
+    font-size: 15pt;
+    border-radius: 10px;
+}
+
+.chart-graph {
+    display: block;
+    margin: 0 auto; /* Center the canvas horizontally */
+    width: 100%; /* Make the canvas take up 70% of the screen width */
+    border: 2px solid #343B4F;
+    border-radius: 10px;
+    max-width: 100%; /* Ensure responsiveness */
+    height: auto; /* Maintain the aspect ratio */
+    margin-bottom: 100px;
+    color: #AEB9E1;
+    background-color: #0A1330;
+    padding: 30px;
+}
+
+.chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%; /* Adjust width to 70% of the screen */
+    margin: 0 auto; /* Center the entire container horizontally */
+    margin-bottom: 20px; /* Add space below the chart-container */
+}

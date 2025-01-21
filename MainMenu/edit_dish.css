@@ -1,0 +1,168 @@
+body {
+    font-family: "Mona Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    background-color: #081028;
+    color: #AEB9E1;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ensure the body takes up the full viewport height */
+}
+
+.wrapper-container {
+    background-color: #0B1739;
+    border: 2px solid #343B4F;
+    padding: 15px 30px; /* Reduced padding */
+    border-radius: 8px;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    margin-top: 10px;
+    max-width: 300px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 15px; /* Reduced margin */
+    color: #E2E8F0;
+    font-size: 18px; /* Reduced font size */
+}
+
+.form-template {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px; /* Reduced gap */
+}
+
+.form-template p {
+    margin-bottom: 0;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px; /* Reduced padding */
+    border: 1px solid #AEB9E1;
+    border-radius: 5px;
+    background-color: #0F172A;
+    color: #E2E8F0;
+    font-size: 14px; /* Reduced font size */
+}
+
+input::placeholder, textarea::placeholder {
+    color: #AEB9E1;
+    font-size: 12px; /* Smaller placeholder text */
+}
+
+textarea {
+    resize: none;
+}
+
+label {
+    text-align: left;
+    color: #E2E8F0;
+    font-size: 12px; /* Reduced font size */
+}
+
+
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.submit-btn, .reset-btn {
+    background-color: #1D4ED8;
+    color: white;
+    border: none;
+    padding: 8px 15px; /* Reduced padding */
+    font-size: 14px; /* Reduced font size */
+    border-radius: 5px;
+    cursor: pointer;
+    width: 48%;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #2563EB;
+}
+
+.reset-btn:hover {
+    background-color: #EF4444;
+}
+
+.submit-btn:active, .reset-btn:active {
+    transform: scale(0.98);
+}
+
+.file-input {
+    display: none; /* Hides the default input */
+}
+
+.custom-file-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #1D4ED8;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.custom-file-label:hover {
+    background-color: #2563EB;
+}
+
+.custom-file-label:active {
+    transform: scale(0.98);
+}
+
+.file-name {
+    margin-top: 10px;
+    display: block;
+    font-size: 14px;
+    color: #AEB9E1;
+}
+
+.choose-file-btn {
+    display: flex;
+    flex-direction: row;
+}
+
+.current-image {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.current-image image {
+    max-width: 50%;
+}
+
+.current-image p {
+    margin-top: 0;
+}
+
+.back-menu-btn {
+    margin-right: 5px;
+    background-color: transparent;
+    color: #AEB9E1;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 15pt;
+    border: 2px solid #343B4F;
+    border-radius: 10px;
+}
+
+.back-menu-btn i {
+    margin-right: 10px;
+
+}

@@ -237,31 +237,35 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
     </div>
 
 
-    <!-- Time Period Selector -->
-    <label for="periodSelect">Select Period: </label>
-    <select id="periodSelect" onchange="updateChart(this.value)">
-        <option value="day">Day</option>
-        <option value="week">Week</option>
-        <option value="month">Month</option>
-        <option value="year">Year</option>
-    </select>
+    <div class="chart-container">
+        <div class="chart-selector">
+            <label for="periodSelect">Select Period: </label>
+            <select id="periodSelect" class="select-time" onchange="updateChart(this.value)">
+                <option value="day">Day</option>
+                <option value="week">Week</option>
+                <option value="month">Month</option>
+                <option value="year">Year</option>
+            </select>
+        </div>
+
+        <canvas class="chart-graph" id="profitChart"></canvas>
     </div>
 
-    <!-- Graph to display profit data -->
-    <canvas id="profitChart" width="400" height="200"></canvas>
+
+
 
     <script>
         // Initialize the chart with default data (Day view)
         var ctx = document.getElementById('profitChart').getContext('2d');
         var profitChart = new Chart(ctx, {
-            type: 'line', // Type of chart: 'line', 'bar', etc.
+            type: 'bar', // Type of chart: 'line', 'bar', etc.
             data: {
                 labels: [], // Empty initially, will be filled after fetching data
                 datasets: [{
                     label: 'Total Profits',
                     data: [], // Empty initially, will be filled after fetching data
                     borderColor: 'rgba(75, 192, 192, 1)',
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    backgroundColor: 'rgba(75, 192, 192, 1)',
                     fill: true,
                     tension: 0.1
                 }]
