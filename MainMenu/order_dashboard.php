@@ -248,7 +248,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
         // Initialize the chart with default data (Day view)
         var ctx = document.getElementById('profitChart').getContext('2d');
         var profitChart = new Chart(ctx, {
-            type: 'bar', // Type of chart: 'line', 'bar', etc.
+            type: 'line', // Type of chart: 'line', 'bar', etc.
             data: {
                 labels: [], // Empty initially, will be filled after fetching data
                 datasets: [{
@@ -262,30 +262,75 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
             },
             options: {
                 responsive: true,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white', // Change legend text to white
+                            font: {
+                                size: 16 // Increase legend font size
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Profit Chart',
+                        color: 'white', // Change title text to white
+                        font: {
+                            size: 20 // Increase title font size
+                        }
+                    }
+                },
                 scales: {
                     x: {
                         title: {
                             display: true,
-                            text: 'Date'
+                            text: 'Date',
+                            color: 'white', // Change x-axis title text to white
+                            font: {
+                                size: 16 // Increase x-axis title font size
+                            }
+                        },
+                        ticks: {
+                            color: 'white', // Change x-axis tick text to white
+                            font: {
+                                size: 14 // Increase x-axis tick font size
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)', // Add white grid lines with slight transparency
+                            drawBorder: false // Remove the border line for a cleaner look
                         }
                     },
                     y: {
                         title: {
                             display: true,
-                            text: 'Profit (RM)'
+                            text: 'Profit (RM)',
+                            color: 'white', // Change y-axis title text to white
+                            font: {
+                                size: 16 // Increase y-axis title font size
+                            }
                         },
-                        min: 0, // Set the minimum value for the y-axis to 0
-                        max: 10000, // Set the maximum value for the y-axis to 10,000
                         ticks: {
+                            color: 'white', // Change y-axis tick text to white
+                            font: {
+                                size: 14 // Increase y-axis tick font size
+                            },
                             stepSize: 1000, // Adjust the step size between tick marks, e.g., every RM1,000
                             callback: function(value, index, values) {
                                 return 'RM' + value; // Add 'RM' prefix to the tick values
                             }
+                        },
+                        min: 0, // Set the minimum value for the y-axis to 0
+                        max: 10000, // Set the maximum value for the y-axis to 10,000
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)', // Add white grid lines with slight transparency
+                            drawBorder: false // Remove the border line for a cleaner look
                         }
                     }
                 }
             }
         });
+
 
 
         // Fetch the profit data from the PHP script and update the chart
