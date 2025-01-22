@@ -248,6 +248,10 @@ body {
     font-weight: bold;
 }
 
+.status-button:disabled {
+    background-color: #737a94; /* White background */
+}
+
 .chart-selector {
     text-align: center;
     margin-bottom: 20px; /* Add space below the selector */

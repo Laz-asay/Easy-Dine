@@ -37,10 +37,15 @@ foreach ($cart as $item) {
 }
 
 date_default_timezone_set('Asia/Kuala Lumpur');
-// Insert the order into the `orderlist` table
-$orderDate = date("Y-m-d H:i:s");
+
+// Add 8 hours to the current date and time
+$orderDate = new DateTime();
+$orderDate->modify('+7 hours');
+$orderDate = $orderDate->format('Y-m-d H:i:s'); // Format the datetime
+
 $orderStatus = "Pending"; // Default order status
 
+// Insert the order into the `orderlist` table
 $stmtOrder = $conn->prepare("INSERT INTO orderlist (order_date, total_amount, order_status, price, Table_ID) VALUES (?, ?, ?, ?, ?)");
 $stmtOrder->bind_param("sdssi", $orderDate, $totalAmount, $orderStatus, $totalAmount, $tableID);
 

@@ -11,7 +11,8 @@ if (!isset($_SESSION['admin_username'])) {
 include("../connectdb.php");
 
 // Check if the order status is being updated
-if (isset($_POST['update_status'])) {
+// Check if the order status is being updated
+if (isset($_POST['update_status']) && isset($_POST['order_status'])) {
     $order_id = $_POST['order_id'];
     $new_status = $_POST['order_status'];
 
@@ -52,23 +53,12 @@ if (isset($_POST['push_to_report'])) {
         $stmt_order->execute();
         $result_order = $stmt_order->get_result();
         $order = $result_order->fetch_assoc();
-
-        // Insert into the reports table
-        $order_status = $order['order_status'];
-        $profit = $order['total_amount']; // Assuming profit equals the total amount for simplicity
-
-        $sql_report = "INSERT INTO reports (order_status, profit, Order_ID) VALUES (?, ?, ?)";
-        $stmt_report = $conn->prepare($sql_report);
-        $stmt_report->bind_param("sdi", $order_status, $profit, $order_id);
-        $stmt_report->execute();
-
-        // Once pushed to the report, mark the order as completed and prevent status changes
-        $sql_update_status = "UPDATE orderlist SET order_status = 'Completed' WHERE Order_ID = ?";
-        $stmt_update_status = $conn->prepare($sql_update_status);
-        $stmt_update_status->bind_param("i", $order_id);
-        $stmt_update_status->execute();
+        
+        // Check if the order is completed or already pushed to the report
+        $is_disabled = ($order['order_status'] == 'Completed') ? 'disabled' : '';
     }
 }
+
 
 
 
@@ -262,7 +252,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
             data: {
                 labels: [], // Empty initially, will be filled after fetching data
                 datasets: [{
-                    label: 'Total Profits', // Ensure the label is just a string
+                    label: 'Total Profits',
                     data: [], // Empty initially, will be filled after fetching data
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 1)',
@@ -276,53 +266,20 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
                     x: {
                         title: {
                             display: true,
-                            text: 'Date',
-                            color: 'white',  // Change x-axis title color to white
-                            font: {
-                                size: 16, // Increase font size for x-axis title
-                            }
-                        },
-                        ticks: {
-                            color: 'white',  // Change x-axis ticks color to white
-                            font: {
-                                size: 14, // Increase font size for x-axis ticks
-                            }
+                            text: 'Date'
                         }
                     },
                     y: {
                         title: {
                             display: true,
-                            text: 'Profit (RM)',
-                            color: 'white',  // Change y-axis title color to white
-                            font: {
-                                size: 16, // Increase font size for y-axis title
-                            }
+                            text: 'Profit (RM)'
                         },
                         min: 0, // Set the minimum value for the y-axis to 0
-                        max: 1000, // Set the maximum value for the y-axis to 10,000 (or adjust based on your data)
+                        max: 10000, // Set the maximum value for the y-axis to 10,000
                         ticks: {
-                            stepSize: 100, // Adjust the step size between tick marks (now every RM500)
+                            stepSize: 1000, // Adjust the step size between tick marks, e.g., every RM1,000
                             callback: function(value, index, values) {
-                                return value; // Add 'RM' prefix to the tick values
-                            },
-                            color: 'white',  // Change y-axis ticks color to white
-                            font: {
-                                size: 14, // Increase font size for y-axis ticks
-                            }
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.2)', // Add grid lines in white with reduced opacity
-                            lineWidth: 1, // Set grid line width
-                            borderColor: 'white', // Optional: border color for the y-axis grid
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            color: 'white', // Change the color of the legend labels
-                            font: {
-                                size: 16, // Increase font size for legend labels
+                                return 'RM' + value; // Add 'RM' prefix to the tick values
                             }
                         }
                     }
@@ -336,18 +293,15 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
             fetch('fetch_profit_data.php?period=' + period)
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data); // Log data to check if it's being fetched properly
+                    // Update chart with new data
                     profitChart.data.labels = data.labels;
                     profitChart.data.datasets[0].data = data.profits;
-                    profitChart.update(); // Ensure the chart updates with the new data
-                })
-                .catch(error => console.error('Error fetching profit data:', error));
+                    profitChart.update();
+                });
         }
 
         // Initialize with the 'day' period by default
         updateChart('day');
-
-
 
         function loadReports(page) {
             fetch(`?ajax=1&page=${page}`)
@@ -386,59 +340,83 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
         // Initially load reports for the first page
         loadReports(1);
 
+        // Update order display based on the status
         function loadOrders(page) {
             fetch(`fetch_orders.php?ajax=1&page=${page}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Log the data to check if it's being fetched correctly
-                const orderTableBody = document.querySelector(".order-table tbody");
-                orderTableBody.innerHTML = ''; // Clear existing rows
+                .then(response => response.json())
+                .then(data => {
+                    const orderTableBody = document.querySelector(".order-table tbody");
+                    orderTableBody.innerHTML = ''; // Clear existing rows
 
-                // Populate the new rows
-                data.orders.forEach(order => {
-                    const row = document.createElement("tr");
-                    const disabled = order.order_status === 'Completed' ? 'disabled' : '';
-                    row.innerHTML = `
-                        <td>${order.Order_ID}</td>
-                        <td>${order.order_date}</td>
-                        <td>${order.total_amount}</td>
-                        <td>${order.order_status}</td>
-                        <td>${order.table_number}</td>
-                        <td>
-                            <form method="POST" action="" onsubmit="return confirmStatusChange();">
-                                <input type="hidden" name="order_id" value="${order.Order_ID}">
-                                <select name="order_status" class="order-status-select" ${order.order_status === 'Completed' ? 'disabled' : ''}>
-                                    <option value="Pending" ${order.order_status === 'Pending' ? 'selected' : ''}>Pending</option>
-                                    <option value="Done" ${order.order_status === 'Done' ? 'selected' : ''}>Done</option>
-                                    <option value="Cancelled" ${order.order_status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-                                </select>
-                                <button type="submit" name="update_status" class="status-button" ${order.order_status === 'Completed' ? 'disabled' : ''}>Update</button>
-                            </form>
-                            <form method="POST" action="" onsubmit="return confirmPushToReport();">
-                                <input type="hidden" name="order_id" value="${order.Order_ID}">
-                                <button type="submit" name="push_to_report" class="status-button" ${order.order_status === 'Pending' ? 'disabled' : ''}>Push to Report</button>
-                            </form>
-                        </td>
+                    // Populate the new rows
+                    data.orders.forEach(order => {
+                        const disabled = order.order_status === 'Completed' ? 'disabled' : ''; // Disable if Completed
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${order.Order_ID}</td>
+                            <td>${order.order_date}</td>
+                            <td>${order.total_amount}</td>
+                            <td>${order.order_status}</td>
+                            <td>${order.table_number}</td>
+                            <td>
+                                <form method="POST" action="" onsubmit="return confirmStatusChange();">
+                                    <input type="hidden" name="order_id" value="${order.Order_ID}">
+                                    <select name="order_status" class="order-status-select" id="order-status-${order.Order_ID}">
+                                        <option value="Pending" ${order.order_status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                        <option value="Completed" ${order.order_status === 'Completed' ? 'selected' : ''}>Done</option>
+                                        <option value="Cancelled" ${order.order_status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                        <!-- Hidden "Pushed" option, initially not visible -->
+                                        <option value="Pushed" ${order.order_status === 'Pushed' ? 'selected' : ''} style="display: none;">Pushed</option>
+                                    </select>
+                                    <button type="submit" name="update_status" class="status-button" 
+                                        ${order.order_status === 'Pushed' ? 'disabled' : ''}>
+                                        Update
+                                    </button>
+                                </form>
+
+                                <form method="POST" action="" onsubmit="return confirmPushToReport();">
+                                    <input type="hidden" name="order_id" value="${order.Order_ID}">
+                                    <!-- Disable "Push to Report" if status is 'Pending' -->
+                                    <button type="submit" name="push_to_report" class="status-button" 
+                                            ${order.order_status === 'Pending' || order.order_status === 'Pushed' || order.order_status === 'Cancelled' ? 'disabled' : ''}
+                                        onclick="markAsPushed(${order.Order_ID});">
+                                        Push to Report
+                                    </button>
+                                </form>
+                            </td>
+                        `;
+                        orderTableBody.appendChild(row);
+                    });
+
+                    // Update pagination
+                    const pagination = document.querySelector(".order-pagination");
+                    pagination.innerHTML = `
+                        <a href="javascript:void(0);" onclick="loadOrders(1)">First</a>
+                        <a href="javascript:void(0);" onclick="loadOrders(${Math.max(1, page - 1)})">Prev</a>
+                        <span>Page ${page} of ${data.total_pages}</span>
+                        <a href="javascript:void(0);" onclick="loadOrders(${Math.min(data.total_pages, page + 1)})">Next</a>
+                        <a href="javascript:void(0);" onclick="loadOrders(${data.total_pages})">Last</a>
                     `;
-                    orderTableBody.appendChild(row);
-                });
+                })
+                .catch(error => console.error('Error fetching orders:', error));
+        }
 
-                // Update pagination
-                const pagination = document.querySelector(".order-pagination");
-                pagination.innerHTML = `
-                    <a href="javascript:void(0);" onclick="loadOrders(1)">First</a>
-                    <a href="javascript:void(0);" onclick="loadOrders(${Math.max(1, page - 1)})">Prev</a>
-                    <span>Page ${page} of ${data.total_pages}</span>
-                    <a href="javascript:void(0);" onclick="loadOrders(${Math.min(data.total_pages, page + 1)})">Next</a>
-                    <a href="javascript:void(0);" onclick="loadOrders(${data.total_pages})">Last</a>
-                `;
-            })
-            .catch(error => console.error('Error fetching orders:', error));
-
-            }
 
     // Load orders for the first page on page load
     loadOrders(1);
+
+
+    function markAsPushed(orderId) {
+        // Select the corresponding order status dropdown
+        const statusSelect = document.getElementById(`order-status-${orderId}`);
+        
+        // Show the "Pushed" option after clicking "Push to Report"
+        const pushedOption = statusSelect.querySelector('option[value="Pushed"]');
+        if (pushedOption) {
+            pushedOption.style.display = 'block'; // Show the "Pushed" option
+            statusSelect.value = 'Pushed'; // Set the status to "Pushed"
+        }
+    }
 
     </script>
 
