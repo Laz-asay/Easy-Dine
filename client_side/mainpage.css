@@ -135,7 +135,7 @@ body {
     transition: background-color 0.3s;
 }
 
-.card button.active {
+.card button:active {
     color: #944E63;
     border-bottom: 2px solid #944E63;
 }
