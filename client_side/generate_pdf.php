@@ -5,7 +5,7 @@ include "../connectdb.php"; // Include your database connection
 $orderID = $_POST['order_id'] ?? null;
 
 if ($orderID) {
-    $query = "SELECT orderlist.order_date, orderlist.total_amount, orderlist.order_status, 
+    $query = "SELECT orderlist.Order_ID, orderlist.order_date, orderlist.total_amount, orderlist.order_status, 
               tablelist.table_number 
               FROM orderlist 
               JOIN tablelist ON orderlist.Table_ID = tablelist.Table_ID 
@@ -24,6 +24,8 @@ if ($orderID) {
         $pdf->Ln(10);
 
         $pdf->SetFont('Arial', '', 12);
+        $pdf->Cell(50, 10, 'Order ID:', 0, 0);
+        $pdf->Cell(0, 10, $orderData['Order_ID'], 0, 1);
         $pdf->Cell(50, 10, 'Order Date:', 0, 0);
         $pdf->Cell(0, 10, $orderData['order_date'], 0, 1);
         $pdf->Cell(50, 10, 'Table Number:', 0, 0);

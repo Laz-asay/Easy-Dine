@@ -1,12 +1,12 @@
 <?php
-include "session.php";
 include "../connectdb.php";
 
 if (isset($_GET['q'])) {
-    $categoryName = $_GET['q'];
+    $searchQuery = $_GET['q'];
 
-    $stmt = $conn->prepare("SELECT * FROM menu WHERE dish_category = ?");
-    $stmt->bind_param("s", $categoryName);
+    $stmt = $conn->prepare("SELECT * FROM menu WHERE dish_name LIKE ?");
+    $searchTerm = "%" . $searchQuery . "%";
+    $stmt->bind_param("s", $searchTerm);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -35,7 +35,7 @@ if (isset($_GET['q'])) {
             ';
         }
     } else {
-        echo "<p>No available dishes in this category.</p>";
+        echo "<p>No dishes found matching your search.</p>";
     }
 
     echo '</div>';

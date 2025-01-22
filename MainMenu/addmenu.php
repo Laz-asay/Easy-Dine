@@ -6,7 +6,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $dish_price = htmlspecialchars($_POST['dish_price']);
     $dish_desc = htmlspecialchars($_POST['dish_desc']);
     $dish_category = htmlspecialchars($_POST['dish_category']);
-    $dish_availability = isset($_POST['dish_availability']) && $_POST['dish_availability'] === "true" ? 1 : 0; // Ensure boolean handling
     $dish_image = $_FILES['dish_image']; //receive image file
 
     if (isset($dish_image) && $dish_image['error'] == 0) {
@@ -19,11 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $targetFile = $targetDir . $fileName;
 
             if (move_uploaded_file($dish_image['tmp_name'], $targetFile)) {
-                $sql = "INSERT INTO menu (dish_name, dish_image, dish_price, dish_desc, dish_category, dish_availability) 
-                        VALUES (?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO menu (dish_name, dish_image, dish_price, dish_desc, dish_category) 
+                        VALUES (?, ?, ?, ?, ?)";
                 $stmt = $conn->prepare($sql);
                 if ($stmt) {
-                    $stmt->bind_param("ssdssi", $dish_name, $fileName, $dish_price, $dish_desc, $dish_category, $dish_availability);
+                    $stmt->bind_param("ssdss", $dish_name, $fileName, $dish_price, $dish_desc, $dish_category);
 
                     if ($stmt->execute()) {
                         echo "<script>alert('New record created successfully!');</script>";

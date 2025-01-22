@@ -1,5 +1,6 @@
 <?php
 // fetch_profit_data.php
+// fetch_profit_data.php
 
 session_start();
 include("../connectdb.php");
@@ -24,10 +25,12 @@ switch ($period) {
         break;
 }
 
-$sql = "SELECT DATE(order_date) AS date, SUM(profit) AS total_profit 
-        FROM reports 
-        WHERE order_date >= ? 
-        GROUP BY DATE(order_date)
+// Adjust SQL to link with `orderlist` and fetch `order_date` from there
+$sql = "SELECT DATE(o.order_date) AS date, SUM(r.profit) AS total_profit 
+        FROM reports r
+        JOIN orderlist o ON r.Order_ID = o.Order_ID
+        WHERE o.order_date >= ?
+        GROUP BY DATE(o.order_date)
         ORDER BY date ASC";
 
 $stmt = $conn->prepare($sql);
@@ -50,4 +53,5 @@ echo json_encode([
 ]);
 
 mysqli_close($conn);
+
 ?>

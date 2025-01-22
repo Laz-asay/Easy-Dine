@@ -262,7 +262,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
             data: {
                 labels: [], // Empty initially, will be filled after fetching data
                 datasets: [{
-                    label: 'Total Profits',
+                    label: 'Total Profits', // Ensure the label is just a string
                     data: [], // Empty initially, will be filled after fetching data
                     borderColor: 'rgba(75, 192, 192, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 1)',
@@ -276,20 +276,53 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
                     x: {
                         title: {
                             display: true,
-                            text: 'Date'
+                            text: 'Date',
+                            color: 'white',  // Change x-axis title color to white
+                            font: {
+                                size: 16, // Increase font size for x-axis title
+                            }
+                        },
+                        ticks: {
+                            color: 'white',  // Change x-axis ticks color to white
+                            font: {
+                                size: 14, // Increase font size for x-axis ticks
+                            }
                         }
                     },
                     y: {
                         title: {
                             display: true,
-                            text: 'Profit (RM)'
+                            text: 'Profit (RM)',
+                            color: 'white',  // Change y-axis title color to white
+                            font: {
+                                size: 16, // Increase font size for y-axis title
+                            }
                         },
                         min: 0, // Set the minimum value for the y-axis to 0
-                        max: 10000, // Set the maximum value for the y-axis to 10,000
+                        max: 1000, // Set the maximum value for the y-axis to 10,000 (or adjust based on your data)
                         ticks: {
-                            stepSize: 1000, // Adjust the step size between tick marks, e.g., every RM1,000
+                            stepSize: 100, // Adjust the step size between tick marks (now every RM500)
                             callback: function(value, index, values) {
                                 return 'RM' + value; // Add 'RM' prefix to the tick values
+                            },
+                            color: 'white',  // Change y-axis ticks color to white
+                            font: {
+                                size: 14, // Increase font size for y-axis ticks
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.2)', // Add grid lines in white with reduced opacity
+                            lineWidth: 1, // Set grid line width
+                            borderColor: 'white', // Optional: border color for the y-axis grid
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white', // Change the color of the legend labels
+                            font: {
+                                size: 16, // Increase font size for legend labels
                             }
                         }
                     }
@@ -303,15 +336,18 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
             fetch('fetch_profit_data.php?period=' + period)
                 .then(response => response.json())
                 .then(data => {
-                    // Update chart with new data
+                    console.log(data); // Log data to check if it's being fetched properly
                     profitChart.data.labels = data.labels;
                     profitChart.data.datasets[0].data = data.profits;
-                    profitChart.update();
-                });
+                    profitChart.update(); // Ensure the chart updates with the new data
+                })
+                .catch(error => console.error('Error fetching profit data:', error));
         }
 
         // Initialize with the 'day' period by default
         updateChart('day');
+
+
 
         function loadReports(page) {
             fetch(`?ajax=1&page=${page}`)
@@ -351,9 +387,10 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
         loadReports(1);
 
         function loadOrders(page) {
-        fetch(`fetch_orders.php?ajax=1&page=${page}`)
+            fetch(`fetch_orders.php?ajax=1&page=${page}`)
             .then(response => response.json())
             .then(data => {
+                console.log(data); // Log the data to check if it's being fetched correctly
                 const orderTableBody = document.querySelector(".order-table tbody");
                 orderTableBody.innerHTML = ''; // Clear existing rows
 
@@ -370,16 +407,16 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
                         <td>
                             <form method="POST" action="" onsubmit="return confirmStatusChange();">
                                 <input type="hidden" name="order_id" value="${order.Order_ID}">
-                                <select name="order_status" class="order-status-select" ${disabled}>
+                                <select name="order_status" class="order-status-select" ${order.order_status === 'Completed' ? 'disabled' : ''}>
                                     <option value="Pending" ${order.order_status === 'Pending' ? 'selected' : ''}>Pending</option>
-                                    <option valued="Done" ${order.order_status === 'Done' ? 'selected' : ''}>Done</option>
+                                    <option value="Done" ${order.order_status === 'Done' ? 'selected' : ''}>Done</option>
                                     <option value="Cancelled" ${order.order_status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
                                 </select>
-                                <button type="submit" name="update_status" class="status-button" ${disabled}>Update</button>
+                                <button type="submit" name="update_status" class="status-button" ${order.order_status === 'Completed' ? 'disabled' : ''}>Update</button>
                             </form>
                             <form method="POST" action="" onsubmit="return confirmPushToReport();">
                                 <input type="hidden" name="order_id" value="${order.Order_ID}">
-                                <button type="submit" name="push_to_report" class="status-button" ${disabled}>Push to Report</button>
+                                <button type="submit" name="push_to_report" class="status-button" ${order.order_status === 'Pending' ? 'disabled' : ''}>Push to Report</button>
                             </form>
                         </td>
                     `;
@@ -397,7 +434,8 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
                 `;
             })
             .catch(error => console.error('Error fetching orders:', error));
-    }
+
+            }
 
     // Load orders for the first page on page load
     loadOrders(1);

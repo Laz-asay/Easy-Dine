@@ -78,7 +78,7 @@ $stmt->close();
 
             <!-- Edit Staff  -->
             <div class="popup-form" id="edit-staff-popup">
-                <form action="edit_staff.php" method="post">
+                <form class="edit-form" action="edit_staff.php" method="post">
                     <h1>Edit Staff</h1>
 
                     <!-- Hidden input for staff ID -->
@@ -101,8 +101,8 @@ $stmt->close();
                     <input type="password" id="edit-staff-password" name="staff-password">
 
                     <div class="popup-buttons">
-                        <input type="submit" value="Save Changes">
-                        <button type="button" onclick="closeEditPopup()">Cancel</button>
+                        <input class="save-form" type="submit" value="Save Changes">
+                        <button type="button-close" onclick="closeEditPopup()">Cancel</button>
                     </div>
                 </form>
             </div>

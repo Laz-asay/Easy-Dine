@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($staff_password)) {
             $stmt->bind_param("ssssi", $staff_name, $staff_role, $staff_number, $hashed_password, $staff_id);
         } else {
-            $stmt->bind_param("ssssi", $staff_name, $staff_role, $staff_number, $staff_id);
+            $stmt->bind_param("sssi", $staff_name, $staff_role, $staff_number, $staff_id);
         }
 
         // Execute the query

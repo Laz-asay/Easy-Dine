@@ -276,9 +276,10 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
         loadReports(1);
 
         function loadOrders(page) {
-        fetch(`fetch_orders.php?ajax=1&page=${page}`)
+            fetch(`fetch_orders.php?ajax=1&page=${page}`)
             .then(response => response.json())
             .then(data => {
+                console.log(data); // Log the data to check if it's being fetched correctly
                 const orderTableBody = document.querySelector(".order-table tbody");
                 orderTableBody.innerHTML = ''; // Clear existing rows
 
@@ -295,16 +296,16 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
                         <td>
                             <form method="POST" action="" onsubmit="return confirmStatusChange();">
                                 <input type="hidden" name="order_id" value="${order.Order_ID}">
-                                <select name="order_status" class="order-status-select" ${disabled}>
+                                <select name="order_status" class="order-status-select" ${order.order_status === 'Completed' ? 'disabled' : ''}>
                                     <option value="Pending" ${order.order_status === 'Pending' ? 'selected' : ''}>Pending</option>
-                                    <option valued="Done" ${order.order_status === 'Done' ? 'selected' : ''}>Done</option>
+                                    <option value="Done" ${order.order_status === 'Done' ? 'selected' : ''}>Done</option>
                                     <option value="Cancelled" ${order.order_status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
                                 </select>
-                                <button type="submit" name="update_status" class="status-button" ${disabled}>Update</button>
+                                <button type="submit" name="update_status" class="status-button" ${order.order_status === 'Completed' ? 'disabled' : ''}>Update</button>
                             </form>
                             <form method="POST" action="" onsubmit="return confirmPushToReport();">
                                 <input type="hidden" name="order_id" value="${order.Order_ID}">
-                                <button type="submit" name="push_to_report" class="status-button" ${disabled}>Push to Report</button>
+                                <button type="submit" name="push_to_report" class="status-button" ${order.order_status === 'Pending' ? 'disabled' : ''}>Push to Report</button>
                             </form>
                         </td>
                     `;
@@ -322,7 +323,8 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
                 `;
             })
             .catch(error => console.error('Error fetching orders:', error));
-    }
+
+        }
 
     // Load orders for the first page on page load
     loadOrders(1);

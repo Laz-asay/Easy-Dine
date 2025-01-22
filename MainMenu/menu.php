@@ -257,13 +257,14 @@ if (!isset($_SESSION['admin_username'])) {
                     <input type="text" name="dish_name" id="dish_name" placeholder="Dish Name" required>
 
                     <div class="file-upload">
-                        <div class="custom-file-input">
-                            <label for="dish_image" class="file-label">Upload Dish Image</label>
-                            <input type="file" id="dish_image" name="dish_image" class="image-upload-button" required>
-                            <button type="button" class="custom-file-button">Choose File</button> <!-- Custom file button -->
-                        </div>
-                        <span id="file-name"></span> 
+                    <div class="custom-file-input">
+                        <label for="dish_image" class="file-label">Upload Dish Image</label>
+                        <input type="file" id="dish_image" name="dish_image" class="image-upload-button" required>
+                        <button type="button" class="custom-file-button" onclick="document.getElementById('dish_image').click();">Choose File</button> <!-- Custom file button -->
                     </div>
+                    <span id="file-name"></span> 
+                </div>
+
 
                     <input type="number" name="dish_price" id="dish_price" placeholder="Dish Price" step="0.01" min="0" required>
 
@@ -286,12 +287,12 @@ if (!isset($_SESSION['admin_username'])) {
                 </div>
 
                 <div class="add-dish-buttons">
-                    <input type="hidden" name="dish_availability" value="1" required>
                     <input type="submit" name="submit" value="Submit">
                     <input type="reset" value="Reset">
                 </div>
             </form>
         </div>
+
 
         <!-- Overlay (Background behind the popup) -->
         <div id="overlay" class="overlay" onclick="closeForm()"></div>
@@ -341,6 +342,8 @@ if (!isset($_SESSION['admin_username'])) {
             function confirmAllDeletion() {
                 return confirm("Are you sure you want to delete all tables and their orders?");
             }
+
+            document.getElementById('dish_image').click();
 
 
         </script>

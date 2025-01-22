@@ -8,6 +8,9 @@ if ($tableNumber === null) {
     echo "No table number found. Please select a table on the previous page.";
     exit;
 }
+
+date_default_timezone_set("Asia/Kuala_Lumpur");
+$currentDateTime = date("Y-m-d H:i:s");
 ?>
 
 
@@ -136,7 +139,28 @@ if ($tableNumber === null) {
             }, 5000);
 
 
+            function searchDishes() {
+                var searchQuery = document.getElementById('searchInput').value;
+
+                // Clear the display menu content if search query is empty
+                if (searchQuery === '') {
+                    document.getElementById('displayMenu').innerHTML = '';
+                    return;
+                }
+
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        // Update the content with the search results
+                        document.getElementById('displayMenu').innerHTML = this.responseText;
+                    }
+                };
+                xhttp.open("GET", "search_dishes.php?q=" + encodeURIComponent(searchQuery), true);
+                xhttp.send();
+            }
+
         </script>
+
     </head>
 
     <body>
@@ -160,6 +184,13 @@ if ($tableNumber === null) {
                     </button>
                 </div>
             </div>
+
+            <div class="search-center">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Search dishes..." onkeyup="searchDishes()">
+                </div>
+            </div>
+
             <!-- END OF TABLE AND CART -->
 
 

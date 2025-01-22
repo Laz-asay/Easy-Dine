@@ -13,15 +13,34 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
     position: fixed;
     width: 100%;
-    padding: 15px;
     z-index: 1000;
     top: 0;
     left: 0;
     padding-top: 40px;
+    padding-bottom: 10px;
 }
 
 body {
-    padding-top: 70px; /* Adjust this based on the height of your top-menu */
+    padding-top: 120px; /* Adjust this based on the height of your top-menu */
+}
+
+.search-center {
+    display: flex;
+    justify-content: center;
+}
+
+.search-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-container input[type='text']{
+    width: 80%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid grey;
 }
 
 .top-menu {

@@ -156,11 +156,27 @@ body {
     z-index: 9999;
 }
 
-.popup-buttons {
-    margin-top: 20px;
+.edit-form {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 10px;
 }
+
+.edit-form input[type='text'],
+.edit-form input[type='tel'],
+.edit-form input[type='password']{
+    background-color: #0B1739;
+    padding: 10px;
+    border: 2px solid #343B4F;
+    color: #AEB9E1;
+    border-radius: 10px;
+}
+
+.edit-form input[type='submit']{
+    background-color: #CB3CFF;
+}
+
+
 
 .popup-buttons input, .popup-buttons button {
     background-color: #944E63;
@@ -172,7 +188,9 @@ body {
 }
 
 .popup-buttons button {
-    background-color: #ccc;
+    background-color: #9e9e9e;
+    border: 2px solid #343B4F;
+    border-radius: 10px;
 }
 
 
