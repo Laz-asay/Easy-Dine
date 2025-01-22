@@ -303,7 +303,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
                         ticks: {
                             stepSize: 100, // Adjust the step size between tick marks (now every RM500)
                             callback: function(value, index, values) {
-                                return 'RM' + value; // Add 'RM' prefix to the tick values
+                                return value; // Add 'RM' prefix to the tick values
                             },
                             color: 'white',  // Change y-axis ticks color to white
                             font: {

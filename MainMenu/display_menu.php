@@ -21,6 +21,12 @@
                 exit;
             }
 
+            // Retrieve the category value safely
+            $category = $_GET['q']; 
+            
+            // Display category name
+            echo "<h2>" . htmlspecialchars($category) . "</h2>";
+
             $sql = "SELECT dish_image, dish_name, dish_desc, dish_price FROM menu WHERE dish_category = ?";
             $stmt = $conn->prepare($sql);
             if ($stmt === false) {

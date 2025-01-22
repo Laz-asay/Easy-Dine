@@ -75,7 +75,7 @@ if (isset($_POST['push_to_report'])) {
 // Check if it's an AJAX request
 if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
     // Pagination variables
-    $limit = 10; // Number of reports per page
+    $limit = 7; // Number of reports per page
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $offset = ($page - 1) * $limit;
 
@@ -238,6 +238,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
 
     <script>
 
+        // Pagination for Reports
         function loadReports(page) {
             fetch(`?ajax=1&page=${page}`)
                 .then(response => response.json())
@@ -246,7 +247,6 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
                     const reportTableBody = document.querySelector("#reportPopup tbody");
                     reportTableBody.innerHTML = ''; // Clear existing rows
 
-                    // Populate the new rows
                     data.reports.forEach(report => {
                         const row = document.createElement("tr");
                         row.innerHTML = `
@@ -272,58 +272,52 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
                 .catch(error => console.error('Error fetching reports:', error));
         }
 
-        // Initially load reports for the first page
-        loadReports(1);
-
         function loadOrders(page) {
             fetch(`fetch_orders.php?ajax=1&page=${page}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data); // Log the data to check if it's being fetched correctly
-                const orderTableBody = document.querySelector(".order-table tbody");
-                orderTableBody.innerHTML = ''; // Clear existing rows
+                .then(response => response.json())
+                .then(data => {
+                    const orderTableBody = document.querySelector(".order-table tbody");
+                    orderTableBody.innerHTML = ''; // Clear existing rows
 
-                // Populate the new rows
-                data.orders.forEach(order => {
-                    const row = document.createElement("tr");
-                    const disabled = order.order_status === 'Completed' ? 'disabled' : '';
-                    row.innerHTML = `
-                        <td>${order.Order_ID}</td>
-                        <td>${order.order_date}</td>
-                        <td>${order.total_amount}</td>
-                        <td>${order.order_status}</td>
-                        <td>${order.table_number}</td>
-                        <td>
-                            <form method="POST" action="" onsubmit="return confirmStatusChange();">
-                                <input type="hidden" name="order_id" value="${order.Order_ID}">
-                                <select name="order_status" class="order-status-select" ${order.order_status === 'Completed' ? 'disabled' : ''}>
-                                    <option value="Pending" ${order.order_status === 'Pending' ? 'selected' : ''}>Pending</option>
-                                    <option value="Done" ${order.order_status === 'Done' ? 'selected' : ''}>Done</option>
-                                    <option value="Cancelled" ${order.order_status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
-                                </select>
-                                <button type="submit" name="update_status" class="status-button" ${order.order_status === 'Completed' ? 'disabled' : ''}>Update</button>
-                            </form>
-                            <form method="POST" action="" onsubmit="return confirmPushToReport();">
-                                <input type="hidden" name="order_id" value="${order.Order_ID}">
-                                <button type="submit" name="push_to_report" class="status-button" ${order.order_status === 'Pending' ? 'disabled' : ''}>Push to Report</button>
-                            </form>
-                        </td>
+                    data.orders.forEach(order => {
+                        const row = document.createElement("tr");
+                        const disabled = order.order_status === 'Completed' ? 'disabled' : '';
+                        row.innerHTML = `
+                            <td>${order.Order_ID}</td>
+                            <td>${order.order_date}</td>
+                            <td>${order.total_amount}</td>
+                            <td>${order.order_status}</td>
+                            <td>${order.table_number}</td>
+                            <td>
+                                <form method="POST" action="" onsubmit="return confirmStatusChange();">
+                                    <input type="hidden" name="order_id" value="${order.Order_ID}">
+                                    <select name="order_status" class="order-status-select" ${order.order_status === 'Completed' ? 'disabled' : ''}>
+                                        <option value="Pending" ${order.order_status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                        <option value="Done" ${order.order_status === 'Done' ? 'selected' : ''}>Done</option>
+                                        <option value="Cancelled" ${order.order_status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                    </select>
+                                    <button type="submit" name="update_status" class="status-button" ${order.order_status === 'Completed' ? 'disabled' : ''}>Update</button>
+                                </form>
+                                <form method="POST" action="" onsubmit="return confirmPushToReport();">
+                                    <input type="hidden" name="order_id" value="${order.Order_ID}">
+                                    <button type="submit" name="push_to_report" class="status-button" ${order.order_status === 'Pending' ? 'disabled' : ''}>Push to Report</button>
+                                </form>
+                            </td>
+                        `;
+                        orderTableBody.appendChild(row);
+                    });
+
+                    // Update pagination
+                    const pagination = document.querySelector(".order-pagination");
+                    pagination.innerHTML = `
+                        <a href="javascript:void(0);" onclick="loadOrders(1)">First</a>
+                        <a href="javascript:void(0);" onclick="loadOrders(${Math.max(1, page - 1)})">Prev</a>
+                        <span>Page ${page} of ${data.total_pages}</span>
+                        <a href="javascript:void(0);" onclick="loadOrders(${Math.min(data.total_pages, page + 1)})">Next</a>
+                        <a href="javascript:void(0);" onclick="loadOrders(${data.total_pages})">Last</a>
                     `;
-                    orderTableBody.appendChild(row);
-                });
-
-                // Update pagination
-                const pagination = document.querySelector(".order-pagination");
-                pagination.innerHTML = `
-                    <a href="javascript:void(0);" onclick="loadOrders(1)">First</a>
-                    <a href="javascript:void(0);" onclick="loadOrders(${Math.max(1, page - 1)})">Prev</a>
-                    <span>Page ${page} of ${data.total_pages}</span>
-                    <a href="javascript:void(0);" onclick="loadOrders(${Math.min(data.total_pages, page + 1)})">Next</a>
-                    <a href="javascript:void(0);" onclick="loadOrders(${data.total_pages})">Last</a>
-                `;
-            })
-            .catch(error => console.error('Error fetching orders:', error));
-
+                })
+                .catch(error => console.error('Error fetching orders:', error));
         }
 
     // Load orders for the first page on page load

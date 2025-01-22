@@ -84,6 +84,9 @@ hr {
 }
 /* END OF BREAK */
 
+.category-display p{
+    font-size: 25pt;
+}
 
 /* Edit/Add/Delete Sections Styling */
 .category-edit-wrapper {
